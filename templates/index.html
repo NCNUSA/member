@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8'>
+		<title>NCNU MEMBER</title>
+	</head>
+	<body>
+		<form method='GET'>
+			<input type='text' name='Q'>
+			<input type='submit'>
+		</form>
+		{% if result %}
+		<table>
+		{% for row in result %}
+		<tr>
+			<td> {{ row.SID }} </td>
+			<td> {{ row.CNAME }} </td>
+			<td> {{ row.DEP }} </td>
+			<td> {{ row.GRADE}} </td>
+		</tr>
+		{% endfor %}
+		</table>
+		{% endif %}
+</html>
