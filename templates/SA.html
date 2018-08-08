@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<title>SA</title>
+		<meta charset='utf-8'>
+	</head>
+	<body>
+		<h1>學生會幹部</h1>
+		{% if SAM %}
+                <table width="100%" border="1" bordercolor="#999999">
+			<tr>
+				<th>學號</th>
+				<th>姓名</th>
+				<th>系所</th>
+				<th>年級</th>
+				<th>信箱</th>
+				<th>手機</th>
+			</tr>
+                {% for row in SAM %}
+                <tr>
+                        <td> {{ row.MEMBER.SID }} </td>
+                        <td> {{ row.MEMBER.CNAME }} </td>
+                        <td> {{ row.MEMBER.DEP }} </td>
+                        <td> {{ row.MEMBER.GRADE}} </td>
+                        {% if row.MEMBER.EMAIL == None %}
+                                <td></td>
+                                {% else %}
+                                <td> {{ row.MEMBER.EMAIL}} </td>
+                        {% endif %}
+                        {% if row.MEMBER.PHONE == None %}
+                                <td></td>
+                                {% else %}
+                                <td> {{ row.MEMBER.PHONE}} </td>
+                        {% endif %}
+                </tr>
+                {% endfor %}
+		</table>
+		{% endif %}
+	</body>
+</html>

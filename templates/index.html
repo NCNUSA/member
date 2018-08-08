@@ -3,22 +3,67 @@
 	<head>
 		<meta charset='utf-8'>
 		<title>NCNU MEMBER</title>
+		<style>
+			td { text-align:center; }
+			.bodyStyle { font-family: "Times New Roman", Times, serif }
+			.fontStyle { font-family: "Comic Sans MS"; font-size: 14px; }
+			.title { height:15px; background-color:#CCCCCC; text-align: left; }
+			.firstTitle { text-align: left; line-height: 22.0pt; }
+			.headerStyle { font-family: "Comic Sans MS"; font-size: 17px; }
+		</style>
 	</head>
 	<body>
+		<a href="SA">學生會幹部</a><br>
+		<a href="admin">管理後台</a><br>
 		<form method='GET'>
 			<input type='text' name='Q'>
 			<input type='submit'>
 		</form>
+		<br>
 		{% if result %}
-		<table>
+		<table width="100%" border="1" bordercolor="#999999">
+			<tr>
+                                <th>學號</th>
+                                <th>姓名</th>
+                                <th>系所</th>
+                                <th>年級</th>
+                                <th>信箱</th>
+                        </tr>
+
 		{% for row in result %}
 		<tr>
 			<td> {{ row.SID }} </td>
 			<td> {{ row.CNAME }} </td>
 			<td> {{ row.DEP }} </td>
 			<td> {{ row.GRADE}} </td>
+			{% if row.EMAIL == None %}
+				<td></td>
+				{% else %}
+				<td> {{ row.EMAIL}} </td>
+			{% endif %}
 		</tr>
 		{% endfor %}
 		</table>
+		{% else %}
+		<pre>
+		欄位格式：
+		  |1
+		學|2
+		  |3
+		  |4
+		碩|5
+		  |6
+		  |7
+		  |8
+		  |畢業
+		博|休學
+		  |退學
+		</pre>
+		<br>
+		輸入範例：
+		<br>
+		1. 104
+		<br>
+		2. 小明 學3 退學
 		{% endif %}
 </html>
