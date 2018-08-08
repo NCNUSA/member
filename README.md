@@ -27,3 +27,9 @@
 匯入資料
 
 ```python manage.py import <filename>```
+
+創建 SuperUser
+
+```python manage.py createsuperuser```
+
+可以在 /admin 頁面登入
