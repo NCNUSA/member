@@ -16,6 +16,10 @@
 
 ```pip install -r requirements.txt```
 
+建立設定檔, 開發模式僅須 DEBUG=on
+
+```cp .env-example .env```
+
 建立資料表
 
 ```python manage.py migrate```
