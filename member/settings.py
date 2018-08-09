@@ -33,7 +33,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG') # False if not in os.environ
 TEMPLATE_DEBUG = env('TEMPLATE_DEBUG')
 
-tuple(env.list('ALLOWED_HOSTS', default=[]))
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
 
 # Application definition
