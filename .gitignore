@@ -92,3 +92,4 @@ venv/
 Django_venv
 .idea/
 *.swp
+nohup.out

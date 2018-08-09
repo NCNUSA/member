@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for stu_year in options['stu_year']:
-
+            global PATH
             # open file
             PATH = PATH + str(stu_year)
             f = open(PATH, "r")
