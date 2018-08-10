@@ -41,6 +41,7 @@ def edit(request, gp=0, sid=0):
             sid = request.POST['sid'].strip()
             title = request.POST['title'].strip()
             email = request.POST['email'].strip()
+            phone = request.POST['phone'].strip()
             user = GPM.objects.get(GP__id=gp, MEMBER__SID=sid)
             user.TITLE = title
             user.save()
@@ -55,6 +56,12 @@ def edit(request, gp=0, sid=0):
                     m.EMAIL = None
                     m.save()
                 pass
+            if phone == "":
+                m.PHONE = None
+                m.save()
+            else:
+                m.PHONE = phone.replace('-', '')
+                m.save()
         return redirect('SA')
     
 def GPedit(request, gp):

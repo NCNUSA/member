@@ -29,6 +29,10 @@
                     職稱：
                     <input name='title' value='{{ user.TITLE | default:"" }}'>
                 </li>
+                <li>
+                    手機：
+                    <input name='phone' value='{{ user.MEMBER.PHONE | default:"" }}'>
+                </li>
             </ul>
             
             <input type="submit"></input>
