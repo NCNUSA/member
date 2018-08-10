@@ -52,7 +52,7 @@ def edit(request, gp=0, sid=0):
                 m.save()
             except:
                 if email == "":
-                    m.EMAIL = email
+                    m.EMAIL = None
                     m.save()
                 pass
         return redirect('SA')
