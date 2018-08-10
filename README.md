@@ -2,38 +2,12 @@
 ![Python Version](https://img.shields.io/badge/Python-3.6-green.svg)
 ![Django Version](https://img.shields.io/badge/Django-2.1-green.svg)
 
-## HOWTO
+**詳情請參考 Gitlab Wiki**
 
-建立虛擬環境
+該專案願景是能夠讓所有的學生社團都能夠共同使用，以資訊化的系統方便大家管理成員。
 
-```python3 -m venv Django_venv```
+## 選擇 Python
 
-啓用虛擬環境
+朋友說想練練 Vue.js，剛好 Laravel 原生支援這個前端框架，都已經建好 Laravel 的資料庫，但考慮到會使用到爬蟲還要跟 Python 做結合，因此打掉乾脆換用 Python 重寫。
 
-```source Django_venv/bin/activate```
-
-安裝必要套件
-
-```pip install -r requirements.txt```
-
-建立設定檔, 開發模式僅須 DEBUG=on
-
-```cp .env-example .env```
-
-建立資料表
-
-```python manage.py migrate```
-
-啓動網頁伺服器
-
-```python manage.py runserver```
-
-匯入資料
-
-```python manage.py import <filename>```
-
-創建 SuperUser
-
-```python manage.py createsuperuser```
-
-可以在 /admin 頁面登入
+Python 好處是語法容易且很好上手，是越來越熱門的語言，許多非本科的學生也都開始在學習，因為這專案本來就旨在提供給各個社團使用，因此選擇比較好上手的語言也不是壞事，若有客製化需求才方便自行修改。

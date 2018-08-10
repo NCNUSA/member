@@ -3,46 +3,57 @@
 		<title>SA</title>
 		<meta charset='utf-8'>
 		<style>
-                        td { text-align:center; }
-                        .bodyStyle { font-family: "Times New Roman", Times, serif }
-                        .fontStyle { font-family: "Comic Sans MS"; font-size: 14px; }
-                        .title { height:15px; background-color:#CCCCCC; text-align: left; }
-                        .firstTitle { text-align: left; line-height: 22.0pt; }
-                        .headerStyle { font-family: "Comic Sans MS"; font-size: 17px; }
-                </style>
-
+            td { text-align:center; }
+            .bodyStyle { font-family: "Times New Roman", Times, serif }
+            .fontStyle { font-family: "Comic Sans MS"; font-size: 14px; }
+            .title { height:15px; background-color:#CCCCCC; text-align: left; }
+            .firstTitle { text-align: left; line-height: 22.0pt; }
+            .headerStyle { font-family: "Comic Sans MS"; font-size: 17px; }
+        </style>
 	</head>
 	<body>
-		<h1>學生會幹部</h1>
-		{% if SAM %}
-                <table width="100%" border="1" bordercolor="#999999">
-			<tr>
-				<th>學號</th>
-				<th>姓名</th>
-				<th>系所</th>
-				<th>年級</th>
-				<th>信箱</th>
-				<th>手機</th>
-			</tr>
-                {% for row in SAM %}
+            <h1>學生會幹部</h1>
+            <button onclick="show();">列出所有學校信箱</button>
+            <button onclick="location.href = '{% url 'gp.edit' 1 %}';">編輯群組</button>
+            <p id="ShowEmail"></p>
+            {% if SAM %}
+            <table width="100%" border="1" bordercolor="#999999">
                 <tr>
-                        <td> {{ row.MEMBER.SID }} </td>
-                        <td> {{ row.MEMBER.CNAME }} </td>
-                        <td> {{ row.MEMBER.DEP }} </td>
-                        <td> {{ row.MEMBER.GRADE}} </td>
-                        {% if row.MEMBER.EMAIL == None %}
-                                <td></td>
-                                {% else %}
-                                <td> {{ row.MEMBER.EMAIL}} </td>
-                        {% endif %}
-                        {% if row.MEMBER.PHONE == None %}
-                                <td></td>
-                                {% else %}
-                                <td> {{ row.MEMBER.PHONE}} </td>
-                        {% endif %}
+                    <th>學號</th>
+                    <th>姓名</th>
+                    <th>職稱</th>
+                    <th>系所</th>
+                    <th>年級</th>
+                    <th>私人信箱</th>
+                    <th>手機</th>
                 </tr>
-                {% endfor %}
-		</table>
-		{% endif %}
+                    {% for row in SAM %}
+                    <tr>
+                            <td >
+                                <a class='SID' href="{% url 'edit' row.GP.id row.MEMBER.SID %}" >{{ row.MEMBER.SID }}</a>
+                            </td>
+                            <td> {{ row.MEMBER.CNAME }} </td>
+                            <td> {{ row.TITLE | default:"" }}</td>
+                            <td> {{ row.MEMBER.DEP }} </td>
+                            <td> {{ row.MEMBER.GRADE }} </td>
+                            <td> {{ row.MEMBER.EMAIL | default:"" }} </td>
+                            <td> {{ row.MEMBER.PHONE | default:"" }} </td>
+                    </tr>
+                    {% endfor %}
+            </table>
+            <script>
+                    var email = "";
+                    let item = document.getElementsByClassName("SID");
+                    for(var i=0; i<13; i++){
+                            email += "s" + item[i].innerHTML.trim() + "@mail1.ncnu.edu.tw, ";
+                    }
+                    email =  email.substr(0, email.length - 2);
+                    function show(){
+                            document.getElementById("ShowEmail").innerHTML = 
+                            '<input onmouseover="this.select()" value="' + email + '" />';
+                    }
+            </script>
+            {% endif %}
+    
 	</body>
 </html>

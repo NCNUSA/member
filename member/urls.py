@@ -15,12 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from backend.views import index, SA
+from backend import views
 
 admin.autodiscover()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index),
-    path('SA', SA),
+    path('', views.index),
+    path('SA', views.SA, name='SA'),
+    path('edit/<str:gp>/<str:sid>/', views.edit, name='edit'),
+    path('edit/', views.edit, name='edit.save'),
+    path('gp/edit/<str:gp>/', views.GPedit, name='gp.edit')
 ]

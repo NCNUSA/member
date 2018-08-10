@@ -20,19 +20,21 @@
 			<input type='submit'>
 		</form>
 		<br>
-		{% if result %}
+        {% if result %}
+        <button onclick="show();">列出所有學校信箱</button>
+        <p id="ShowEmail"></p>
 		<table width="100%" border="1" bordercolor="#999999">
 			<tr>
-                                <th>學號</th>
-                                <th>姓名</th>
-                                <th>系所</th>
-                                <th>年級</th>
-                                <th>信箱</th>
-                        </tr>
+                <th>學號</th>
+                <th>姓名</th>
+                <th>系所</th>
+                <th>年級</th>
+                <th>私人信箱</th>
+            </tr>
 
 		{% for row in result %}
 		<tr>
-			<td> {{ row.SID }} </td>
+			<td class='SID'> {{ row.SID }} </td>
 			<td> {{ row.CNAME }} </td>
 			<td> {{ row.DEP }} </td>
 			<td> {{ row.GRADE}} </td>
@@ -43,7 +45,19 @@
 			{% endif %}
 		</tr>
 		{% endfor %}
-		</table>
+        </table>
+        <script>
+            var email = "";
+            let item = document.getElementsByClassName("SID");
+            for(var i=0; i<13; i++){
+                    email += "s" + item[i].innerHTML.trim() + "@mail1.ncnu.edu.tw, ";
+            }
+            email =  email.substr(0, email.length - 2);
+            function show(){
+                    document.getElementById("ShowEmail").innerHTML = 
+                    '<input onmouseover="this.select()" value="' + email + '" />';
+            }
+        </script>
 		{% else %}
 		<pre>
 		欄位格式：
@@ -64,6 +78,7 @@
 		<br>
 		1. 104
 		<br>
-		2. 小明 學3 資工
+        2. 小明 學3 資工
+
 		{% endif %}
 </html>
