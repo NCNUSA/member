@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 
 class Member(models.Model):
     SID = models.CharField( max_length=10, unique=True, verbose_name='學號' )
@@ -19,6 +18,7 @@ class Member(models.Model):
     def __str__(self):
         return self.SID + ' ' + self.CNAME
 
+
 class GP(models.Model):
     GNAME = models.CharField( max_length=30, verbose_name='社團名稱')
     created_at = models.DateTimeField( auto_now_add=True, verbose_name='建立時間' )
@@ -27,6 +27,7 @@ class GP(models.Model):
     def __str__(self):
         return self.GNAME
 
+
 class GPM(models.Model):
     MEMBER = models.ForeignKey(Member, on_delete=models.CASCADE, verbose_name='成員')
     GP = models.ForeignKey(GP, on_delete=models.CASCADE, verbose_name='群組')
@@ -34,7 +35,6 @@ class GPM(models.Model):
     RM = models.CharField( max_length=30, blank=True, null=True, verbose_name='備註')
     created_at = models.DateTimeField( auto_now_add=True, verbose_name='建立時間' )
     updated_at = models.DateTimeField( auto_now=True, verbose_name='建立時間' )
-
 
     def __str__(self):
         return  self.GP.GNAME + ' ' + self.MEMBER.CNAME

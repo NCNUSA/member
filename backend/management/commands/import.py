@@ -11,6 +11,7 @@ for i in degree:
     for j in status:
         degree_status.append(i+j)
 
+
 class Command(BaseCommand):
     help = 'import member into database'
 

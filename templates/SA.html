@@ -44,7 +44,7 @@
             <script>
                     var email = "";
                     let item = document.getElementsByClassName("SID");
-                    for(var i=0; i<13; i++){
+                    for(var i=0; i<item.length; i++){
                             email += "s" + item[i].innerHTML.trim() + "@mail1.ncnu.edu.tw, ";
                     }
                     email =  email.substr(0, email.length - 2);
