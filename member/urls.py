@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from backend import views
 
 admin.autodiscover()
@@ -25,5 +25,6 @@ urlpatterns = [
     path('SA', views.SA, name='SA'),
     path('edit/<str:gp>/<str:sid>/', views.edit, name='edit'),
     path('edit/', views.edit, name='edit.save'),
-    path('gp/edit/<str:gp>/', views.GPedit, name='gp.edit')
+    path('gp/edit/<str:gp>/', views.GPedit, name='gp.edit'),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

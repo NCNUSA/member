@@ -3,8 +3,9 @@ from django.db.models import Q
 from .models import Member, GP, GPM
 from django.http import HttpResponse
 from django.core.validators import validate_email
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def Qfunction(query):
     """類 Google 搜尋，採用 AND"""
     QQuery = None
@@ -15,7 +16,7 @@ def Qfunction(query):
             QQuery &= Q(Q(SID__contains=i) | Q(GRADE__contains=i) | Q(DEP__contains=i) | Q(CNAME__contains=i))
     return QQuery
 
-
+@login_required
 def index(request):
     if 'Q' in request.GET:
         query = request.GET['Q'].strip().split()
@@ -24,13 +25,13 @@ def index(request):
     else:
         return render(request, 'index.html')
 
-
+@login_required
 def SA(request):
     """秀出學生會名單"""
     SAM = GPM.objects.filter(GP__GNAME='學生會')
     return render(request, 'SA.html', locals())
 
-
+@login_required
 def edit(request, gp=0, sid=0):
     """編輯群組成員的職稱"""
     if gp!=0 and sid!=0:
@@ -65,7 +66,7 @@ def edit(request, gp=0, sid=0):
                 m.save()
         return redirect('SA')
 
-
+@login_required
 def GPedit(request, gp):
     """編輯群組成員"""
     if request.method == 'POST':
