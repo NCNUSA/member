@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.core.validators import validate_email
 from django.contrib.auth.decorators import login_required
 
-@login_required
+
 def Qfunction(query):
     """類 Google 搜尋，採用 AND"""
     QQuery = None
