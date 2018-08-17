@@ -21,7 +21,7 @@ admin.autodiscover()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index),
+    path('', views.index, name='index'),
     path('SA', views.SA, name='SA'),
     path('edit/<str:gp>/<str:sid>/', views.edit, name='edit'),
     path('edit/', views.edit, name='edit.save'),
