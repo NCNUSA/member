@@ -27,48 +27,53 @@
                         </div>
                 </div>
         </nav>
-            <h1>學生會幹部</h1>
-            <button onclick="show();">列出所有學校信箱</button>
-            <button onclick="location.href = '{% url 'gp.edit' 1 %}';">編輯群組</button>
-            <p id="ShowEmail"></p>
-            {% if SAM %}
-            <table width="100%" border="1" bordercolor="#999999">
-                <tr>
-                    <th>學號</th>
-                    <th>姓名</th>
-                    <th>職稱</th>
-                    <th>系所</th>
-                    <th>年級</th>
-                    <th>私人信箱</th>
-                    <th>手機</th>
-                </tr>
-                    {% for row in SAM %}
-                    <tr>
-                            <td >
-                                <a class='SID' href="{% url 'edit' row.GP.id row.MEMBER.SID %}" >{{ row.MEMBER.SID }}</a>
-                            </td>
-                            <td> {{ row.MEMBER.CNAME }} </td>
-                            <td> {{ row.TITLE | default:"" }}</td>
-                            <td> {{ row.MEMBER.DEP }} </td>
-                            <td> {{ row.MEMBER.GRADE }} </td>
-                            <td> {{ row.MEMBER.EMAIL | default:"" }} </td>
-                            <td> {{ row.MEMBER.PHONE | default:"" }} </td>
-                    </tr>
-                    {% endfor %}
-            </table>
-            <script>
-                    var email = "";
-                    let item = document.getElementsByClassName("SID");
-                    for(var i=0; i<item.length; i++){
-                            email += "s" + item[i].innerHTML.trim() + "@mail1.ncnu.edu.tw, ";
-                    }
-                    email =  email.substr(0, email.length - 2);
-                    function show(){
-                            document.getElementById("ShowEmail").innerHTML = 
-                            '<input onmouseover="this.select()" value="' + email + '" />';
-                    }
-            </script>
-            {% endif %}
-    
+        <!-- container -->
+        <div class="container mt-5">
+                <button onclick="show();">列出所有學校信箱</button>
+                <button onclick="location.href = '{% url 'gp.edit' 1 %}';">編輯群組</button>
+                <p id="ShowEmail"></p>
+                {% if SAM %}
+                <table class="table table-hover">
+                        <thead class="thead-dark">
+                                <tr>
+                                        <th>學號</th>
+                                        <th>姓名</th>
+                                        <th>職稱</th>
+                                        <th>系所</th>
+                                        <th>年級</th>
+                                        <th>私人信箱</th>
+                                        <th>手機</th>
+                                </tr>
+                        </thead>
+                        <tbody>
+                                {% for row in SAM %}
+                                <tr>
+                                        <td >
+                                                <a class='SID' href="{% url 'edit' row.GP.id row.MEMBER.SID %}" >{{ row.MEMBER.SID }}</a>
+                                        </td>
+                                        <td> {{ row.MEMBER.CNAME }} </td>
+                                        <td> {{ row.TITLE | default:"" }}</td>
+                                        <td> {{ row.MEMBER.DEP }} </td>
+                                        <td> {{ row.MEMBER.GRADE }} </td>
+                                        <td> {{ row.MEMBER.EMAIL | default:"" }} </td>
+                                        <td> {{ row.MEMBER.PHONE | default:"" }} </td>
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+                </table>
+        </div>
+        <script>
+                var email = "";
+                let item = document.getElementsByClassName("SID");
+                for(var i=0; i<item.length; i++){
+                        email += "s" + item[i].innerHTML.trim() + "@mail1.ncnu.edu.tw, ";
+                }
+                email =  email.substr(0, email.length - 2);
+                function show(){
+                        document.getElementById("ShowEmail").innerHTML = 
+                        '<input onmouseover="this.select()" value="' + email + '" />';
+                }
+        </script>
+        {% endif %}
 	</body>
 </html>

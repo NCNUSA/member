@@ -29,8 +29,6 @@
 				</div>
 			</div>
 		</nav>
-		<!-- <a href="SA">學生會幹部</a><br> -->
-		<!-- <a href="admin">管理後台</a><br> -->
 		<div class="container">
 			<!-- searching box -->
 			<div class="d-flex justify-content-center align-items-center">
@@ -46,45 +44,45 @@
 				<p id="ShowEmail"></p>
 			</div>
 			<!-- show searching result -->
-
-
-					<table class="table table-hover">
-						<thead class="thead-dark">
-							<tr>
-								<th scope="col">學號</th>
-								<th scope="col">姓名</th>
-								<th scope="col">系所</th>
-								<th scope="col">年級</th>
-								<th scope="col">私人信箱</th>
-							</tr>
-						</thead>
-						{% for row in result %}
-						<tbody>
-							<tr>
-								<td class='SID' scope="row"> 
-									{{ row.SID }} 
-								</td>
-								<td scope="row">
-									{{ row.CNAME }} 
-								</td>
-								<td scope="row">
-									{{ row.DEP }}
-								</td>
-								<td scope="row">
-									{{ row.GRADE}}
-								</td>
-								{% if row.EMAIL == None %}
-								<td scope="row"></td>
-								{% else %}
-								<td scope="row">
-									{{ row.EMAIL}}
-								</td>
-								{% endif %}
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-					{% else %}
+			<div>
+				<table class="table table-hover">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col">學號</th>
+							<th scope="col">姓名</th>
+							<th scope="col">系所</th>
+							<th scope="col">年級</th>
+							<th scope="col">私人信箱</th>
+						</tr>
+					</thead>
+					{% for row in result %}
+					<tbody>
+						<tr>
+							<td class='SID' scope="row"> 
+								{{ row.SID }} 
+							</td>
+							<td scope="row">
+								{{ row.CNAME }} 
+							</td>
+							<td scope="row">
+								{{ row.DEP }}
+							</td>
+							<td scope="row">
+								{{ row.GRADE}}
+							</td>
+							{% if row.EMAIL == None %}
+							<td scope="row"></td>
+							{% else %}
+							<td scope="row">
+								{{ row.EMAIL}}
+							</td>
+							{% endif %}
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				{% else %}
+			</div>
 					<pre>
 							欄位格式：
 							  |1
