@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Member, GP, GPM
+from .models import *
 
 # Register your models here.
 
@@ -23,3 +23,5 @@ class GPMAdmin(admin.ModelAdmin):
 admin.site.register(Member, MemberAdmin)
 admin.site.register(GP, GPAdmin)
 admin.site.register(GPM, GPMAdmin)
+admin.site.register(College)
+admin.site.register(Department)

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from .models import Member, GP, GPM
+from .models import *
 from django.http import HttpResponse
 from django.core.validators import validate_email
 
@@ -33,7 +33,7 @@ def SA(request):
 
 def edit(request, gp=0, sid=0):
     """編輯群組成員的職稱"""
-    if gp!=0 and sid!=0:
+    if gp != 0 and sid != 0:
         user = GPM.objects.get(GP__id=gp, MEMBER__SID=sid)
         return render(request, 'edit.html', locals())
     else:
