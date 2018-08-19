@@ -29,8 +29,8 @@
         </nav>
         <!-- container -->
         <div class="container mt-5">
-                <button onclick="show();">列出所有學校信箱</button>
-                <button onclick="location.href = '{% url 'gp.edit' 1 %}';">編輯群組</button>
+                <button class="btn btn-info" onclick="show();">列出所有學校信箱</button>
+                <button class="btn btn-warning" onclick="location.href = '{% url 'gp.edit' 1 %}';">編輯群組</button>
                 <p id="ShowEmail"></p>
                 {% if SAM %}
                 <table class="table table-hover">

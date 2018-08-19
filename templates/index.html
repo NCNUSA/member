@@ -16,14 +16,14 @@
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-			<a class="navbar-brand" href="#">NCNU 學生會員管理系統</a>
+			<a class="navbar-brand" href="{% url 'index' %}">NCNU 學生會員管理系統</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
 			 aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 				<div class="navbar-nav">
-					<a class="nav-item nav-link active" href="#">會員搜尋</a>
+					<a class="nav-item nav-link active" href="{% url 'index' %}">會員搜尋</a>
 					<a class="nav-item nav-link" href="SA">學生會幹部</a>
 					<a class="nav-item nav-link" href="admin">管理後台</a>
 					<a class="nav-item nav-link" href="{% url 'logout' %}">登出</a>
@@ -42,7 +42,7 @@
 			<!-- list email button -->
 			<div>
 				<br> {% if result %}
-				<button onclick="show();">列出所有學校信箱</button>
+				<button class="btn btn-info" onclick="show();">列出所有學校信箱</button>
 				<p id="ShowEmail"></p>
 			</div>
 			<!-- show searching result -->
@@ -85,24 +85,53 @@
 				</table>
 				{% else %}
 			</div>
-					<pre>
-							欄位格式：
-							  |1
-							學|2
-							  |3
-							  |4
-							碩|5
-							  |6
-							  |7
-							  |8
-							  |畢業
-							博|休學
-							  |退學
-							</pre>
-					<br> 輸入範例：
-					<br> 1. 104
-					<br> 2. 小明 學3 資工 {% endif %}
-		</div>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-4">
+                    <label> 輸入範例：</label>
+                    <ol>
+                        <li>王小明</li>
+                        <li>資工 學3</li>
+                        <li>資工 學退學</li>
+                    </ol>
+                </div>
+                <div class="col-md-5">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td rowspan="3">學</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">碩</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4">博</td>
+                            <td>7</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td>休學</td>
+                        </tr>
+                        <tr>
+                            <td>退學</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>{% endif %}
 		<script>
 			var email = "";
 				let item = document.getElementsByClassName("SID");
@@ -112,7 +141,8 @@
 				email = email.substr(0, email.length - 2);
 				function show() {
 					document.getElementById("ShowEmail").innerHTML =
-						'<input onmouseover="this.select()" value="' + email + '" />';
+						'<input onmouseover="this.select()" value="' + email + '" />'+
+                    ' <label> **將滑鼠移到欄位中右鍵即可複製**</label>';
 				}
 		</script>
 
