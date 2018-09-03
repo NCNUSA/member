@@ -91,7 +91,10 @@ def parse_google_sheet(url, SID, CNAME, VIP):
     """爬蟲抓取該表單網頁，因為使用 js 生成網頁所以使用 PhantomJS"""
     from selenium import webdriver
     from bs4 import BeautifulSoup
-    driver = webdriver.PhantomJS(executable_path='/usr/local/bin/phantomjs')
+    import subprocess
+    phantomjs_path = subprocess.check_output(['which', 'phantomjs'])
+    phantomjs_path = phantomjs_path.decode('UTF-8')[:-1]
+    driver = webdriver.PhantomJS(executable_path=phantomjs_path)
     driver.get(url)
     bsObj = BeautifulSoup( driver.page_source, "html.parser" )
     rows = bsObj.find("table").find("tbody").find_all("tr")

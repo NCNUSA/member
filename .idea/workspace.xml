@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1357f86b-736f-43d5-9375-6c2c450624a5" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/templates/GoogleSheet/list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/GoogleSheet/sheet.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/management/commands/UpdateMember.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/management/commands/UpdateMember.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/member/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/member/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/SA.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/SA.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -42,7 +32,7 @@
           <entry key="gitignore" value="24" />
           <entry key="html" value="1808" />
           <entry key="md" value="134" />
-          <entry key="py" value="5167" />
+          <entry key="py" value="5176" />
           <entry key="py@Member" value="9" />
           <entry key="txt" value="26" />
         </counts>
@@ -53,7 +43,7 @@
           <entry key="HTML" value="1808" />
           <entry key="Markdown" value="134" />
           <entry key="PLAIN_TEXT" value="50" />
-          <entry key="Python" value="5167" />
+          <entry key="Python" value="5176" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -113,8 +103,8 @@
               <caret line="137" column="30" selection-start-line="137" selection-start-column="30" selection-end-line="137" selection-end-column="30" />
               <folding>
                 <element signature="e#0#45#0" expanded="true" />
-                <marker date="1535970374024" expanded="true" signature="3189:4306" ph="..." />
-                <marker date="1535970374024" expanded="true" signature="4759:4822" ph="..." />
+                <marker date="1535971933749" expanded="true" signature="3189:4306" ph="..." />
+                <marker date="1535971933749" expanded="true" signature="4759:4822" ph="..." />
               </folding>
             </state>
           </provider>
@@ -129,7 +119,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/GoogleSheet/sheet.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="293">
@@ -147,11 +137,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/backend/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="509">
-              <caret line="64" column="8" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="8" />
+            <state relative-caret-position="1278">
+              <caret line="71" column="24" selection-start-line="71" selection-start-column="24" selection-end-line="71" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -197,9 +187,9 @@
         <option value="$PROJECT_DIR$/member/urls.py" />
         <option value="$PROJECT_DIR$/templates/index.html" />
         <option value="$PROJECT_DIR$/templates/SA.html" />
-        <option value="$PROJECT_DIR$/backend/models.py" />
         <option value="$PROJECT_DIR$/templates/GoogleSheet/list.html" />
         <option value="$PROJECT_DIR$/templates/GoogleSheet/sheet.html" />
+        <option value="$PROJECT_DIR$/backend/models.py" />
       </list>
     </option>
   </component>
@@ -412,6 +402,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="55" y="22" width="1385" height="878" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49745548" visible="true" weight="0.15264334" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -521,8 +512,8 @@
           <caret line="137" column="30" selection-start-line="137" selection-start-column="30" selection-end-line="137" selection-end-column="30" />
           <folding>
             <element signature="e#0#45#0" expanded="true" />
-            <marker date="1535970374024" expanded="true" signature="3189:4306" ph="..." />
-            <marker date="1535970374024" expanded="true" signature="4759:4822" ph="..." />
+            <marker date="1535971933749" expanded="true" signature="3189:4306" ph="..." />
+            <marker date="1535971933749" expanded="true" signature="4759:4822" ph="..." />
           </folding>
         </state>
       </provider>
@@ -561,13 +552,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="509">
-          <caret line="64" column="8" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/GoogleSheet/list.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="470">
@@ -579,6 +563,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="293">
           <caret line="32" column="7" selection-start-line="32" selection-start-column="7" selection-end-line="32" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1278">
+          <caret line="71" column="24" selection-start-line="71" selection-start-column="24" selection-end-line="71" selection-end-column="24" />
         </state>
       </provider>
     </entry>
