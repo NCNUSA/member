@@ -85,3 +85,60 @@ def GPedit(request, gp):
                 GPM.objects.filter(GP=gp, MEMBER__SID=sid).delete()
         return redirect('SA')
     return render(request, 'GPedit.html', locals())
+
+
+def parse_google_sheet(url, SID, CNAME, VIP):
+    """爬蟲抓取該表單網頁，因為使用 js 生成網頁所以使用 PhantomJS"""
+    from selenium import webdriver
+    from bs4 import BeautifulSoup
+    driver = webdriver.PhantomJS(executable_path='/usr/local/bin/phantomjs')
+    driver.get(url)
+    bsObj = BeautifulSoup( driver.page_source, "html.parser" )
+    rows = bsObj.find("table").find("tbody").find_all("tr")
+    # 每列資料都塞在這裡面
+    table = []
+    for row in rows:
+        columns = row.find_all("td")
+        tmp_list = []
+        for field in columns:
+            tmp_list.append(field.text)
+        table.append(tmp_list)
+    # Google form 輸出結果第二行會是空白，將之移除
+    try:
+        table.remove([""]*len(table[0]))
+    except:
+        pass
+    # 判斷姓名是否跟學號匹配
+    if SID != None and CNAME != None:
+        for index, row in enumerate(table):
+            if index == 0:
+                row.append("姓名是否匹配")
+                continue
+            try:
+                m = Member.objects.get(SID=row[SID-1])
+                if row[CNAME - 1] != m.CNAME:
+                    row.append("錯誤(學生會資料庫：" + m.CNAME + ")")
+                else:
+                    row.append("")
+            except:
+                row.append("資料庫中尚未有此人")
+    return table
+
+
+@login_required
+def googleSheet(request, UID=0):
+    """Google 表單資料"""
+
+    if UID != 0:
+        try:
+            sheet = GoogleSheet.objects.get(id=UID)
+        except:
+            return HttpResponse("找不到該表單，請聯絡開發人員")
+        table = parse_google_sheet(sheet.URL, sheet.SID, sheet.CNAME, sheet.VIP)
+        amount = len(table) - 1
+        return render(request, 'GoogleSheet/sheet.html', locals())
+
+    else:
+        sheet = GoogleSheet.objects.all()
+
+    return render(request, 'GoogleSheet/list.html', locals())

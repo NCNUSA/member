@@ -25,6 +25,8 @@ urlpatterns = [
     path('SA', views.SA, name='SA'),
     path('edit/<str:gp>/<str:sid>/', views.edit, name='edit'),
     path('edit/', views.edit, name='edit.save'),
+    path('GoogleSheet/', views.googleSheet, name='GoogleSheet'),
+    path('GoogleSheet/<int:UID>', views.googleSheet, name='GoogleSheet.detail'),
     path('gp/edit/<str:gp>/', views.GPedit, name='gp.edit'),
     path('accounts/', include('django.contrib.auth.urls')),
 ]
