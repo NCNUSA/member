@@ -22,11 +22,12 @@ admin.autodiscover()
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('SA', views.SA, name='SA'),
     path('edit/<str:gp>/<str:sid>/', views.edit, name='edit'),
     path('edit/', views.edit, name='edit.save'),
+    path('Group/', views.group_list, name='gp.list'),
+    path('Group/<int:uid>', views.group_detail, name='gp.detail'),
+    path('Group/edit/<str:gp>/', views.GPedit, name='gp.edit'),
     path('GoogleSheet/', views.googleSheet, name='GoogleSheet'),
     path('GoogleSheet/<int:UID>', views.googleSheet, name='GoogleSheet.detail'),
-    path('gp/edit/<str:gp>/', views.GPedit, name='gp.edit'),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

@@ -16,6 +16,7 @@ def Qfunction(query):
             QQuery &= Q(Q(SID__contains=i) | Q(GRADE__contains=i) | Q(DEP__contains=i) | Q(CNAME__contains=i))
     return QQuery
 
+
 @login_required
 def index(request):
     if 'Q' in request.GET:
@@ -25,18 +26,26 @@ def index(request):
     else:
         return render(request, 'index.html')
 
+
 @login_required
-def SA(request):
-    """秀出學生會名單"""
-    SAM = GPM.objects.filter(GP__GNAME='學生會')
-    return render(request, 'SA.html', locals())
+def group_list(request):
+    gp_list = GP.objects.all()
+    return render(request, 'Group/list.html', locals())
+
+
+@login_required
+def group_detail(request, uid):
+    gp = GP.objects.get(id=uid)
+    gp_member = GPM.objects.filter(GP__id=uid)
+    return render(request, 'Group/detail.html', locals())
+
 
 @login_required
 def edit(request, gp=0, sid=0):
     """編輯群組成員的職稱"""
     if gp != 0 and sid != 0:
         user = GPM.objects.get(GP__id=gp, MEMBER__SID=sid)
-        return render(request, 'edit.html', locals())
+        return render(request, 'Group/edit.html', locals())
     else:
         if 'gp' in request.POST and 'sid' in request.POST:
             gp = request.POST['gp'].strip()
@@ -70,10 +79,10 @@ def edit(request, gp=0, sid=0):
 def GPedit(request, gp):
     """編輯群組成員"""
     if request.method == 'POST':
-        gp = request.POST['gp'].strip()
+        gp_id = request.POST['gp'].strip()
         add = request.POST['add'].strip().split(',')
         remove = request.POST['remove'].strip().split(',')
-        gp = GP.objects.get(id=gp)
+        gp = GP.objects.get(id=gp_id)
         for i in add:
             sid = i.strip()
             if sid.strip() != '' and Member.objects.filter(SID=sid).exists() and not GPM.objects.filter(GP=gp, MEMBER__SID=sid).exists():
@@ -83,12 +92,12 @@ def GPedit(request, gp):
             sid = i.strip()
             if sid.strip() != '' and Member.objects.filter(SID=sid).exists() and GPM.objects.filter(GP=gp, MEMBER__SID=sid).exists():
                 GPM.objects.filter(GP=gp, MEMBER__SID=sid).delete()
-        return redirect('SA')
-    return render(request, 'GPedit.html', locals())
+        return redirect(group_detail, gp_id)
+    return render(request, 'Group/GPedit.html', locals())
 
 
 def parse_google_sheet(url, SID, CNAME, VIP):
-    """爬蟲抓取該表單網頁，因為使用 js 生成網頁所以使用 PhantomJS"""
+    """爬蟲抓取該表單網頁，因為使用 js 生成網頁所以使用 Selenium"""
     from selenium import webdriver
     from bs4 import BeautifulSoup
     from selenium.webdriver import FirefoxOptions

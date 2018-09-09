@@ -22,8 +22,8 @@
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                                 <a class="nav-item nav-link" href="{% url 'index' %}">會員搜尋</a>
-                                <a class="nav-item nav-link" href="{% url 'gp.list' %}">群組</a>
-                                <a class="nav-item nav-link active" href="{% url 'GoogleSheet' %}">表單資料</a>
+                                <a class="nav-item nav-link active" href="{% url 'gp.list' %}">群組</a>
+                                <a class="nav-item nav-link" href="{% url 'GoogleSheet' %}">表單資料</a>
                                 <a class="nav-item nav-link" href="{% url 'admin:index' %}">管理後台</a>
                                 <a class="nav-item nav-link" href="{% url 'logout' %}">登出</a>
                         </div>
@@ -36,12 +36,12 @@
             <table class="table table-hover">
                 <tr>
                     <th>名稱（點擊查看）</th>
-                    <th>原始網址</th>
+                    <th>建立日期</th>
                 </tr>
-                {% for i in sheet %}
+                {% for i in gp_list %}
                 <tr>
-                    <td><a href="{{ i.id }}">{{ i.TITLE }}</a></td>
-                    <td><a href="{{ i.URL }}">連結</a></td>
+                    <td><a href="{{ i.id }}">{{ i.GNAME }}</a></td>
+                    <td>{{ i.created_at }}</td>
                 </tr>
                 {%  endfor %}
             </table>
