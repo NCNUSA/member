@@ -133,9 +133,12 @@ USE_TZ = True
 public_root = root.path('public/')
 
 MEDIA_ROOT = public_root('media')
-MEDIA_URL = 'media/'
-STATIC_ROOT = public_root('static')
+MEDIA_URL = '/media/'
+# STATIC_ROOT = public_root('static')
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+)
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
