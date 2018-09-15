@@ -29,71 +29,86 @@ def index(request):
 
 @login_required
 def group_list(request):
-    gp_list = GP.objects.all()
+    gp_list = []
+    for item in UserPerms.objects.filter(user = request.user.id, view = True):
+        gp_list.append(item.gp)
+    # print(gp_list)
+    # gp_list = GP.objects.all()
     return render(request, 'Group/list.html', locals())
 
 
 @login_required
 def group_detail(request, uid):
-    gp = GP.objects.get(id=uid)
-    gp_member = GPM.objects.filter(GP__id=uid)
-    return render(request, 'Group/detail.html', locals())
+    if UserPerms.objects.filter(user = request.user.id, gp = uid, view = True):
+        edit = UserPerms.objects.get(user = request.user.id, gp = uid).edit
+        gp = GP.objects.get(id=uid)
+        gp_member = GPM.objects.filter(GP__id=uid)
+        return render(request, 'Group/detail.html', locals())
+    else:
+        return HttpResponse("無此權限")
 
 
 @login_required
 def edit(request, gp=0, sid=0):
     """編輯群組成員的職稱"""
-    if gp != 0 and sid != 0:
-        user = GPM.objects.get(GP__id=gp, MEMBER__SID=sid)
-        return render(request, 'Group/edit.html', locals())
-    else:
-        if 'gp' in request.POST and 'sid' in request.POST:
-            gp = request.POST['gp'].strip()
-            sid = request.POST['sid'].strip()
-            title = request.POST['title'].strip()
-            email = request.POST['email'].strip()
-            phone = request.POST['phone'].strip()
+    if UserPerms.objects.filter(user = request.user.id, gp = gp, edit = True):
+        if gp != 0 and sid != 0:
             user = GPM.objects.get(GP__id=gp, MEMBER__SID=sid)
-            user.TITLE = title
-            user.save()
-            m = user.MEMBER
-            # 驗證 email 正確性
-            try:
-                validate_email(email)
-                m.EMAIL = email
-                m.save()
-            except:
-                if email == "":
-                    m.EMAIL = None
+            return render(request, 'Group/edit.html', locals())
+        else:
+            if 'gp' in request.POST and 'sid' in request.POST:
+                gp = request.POST['gp'].strip()
+                sid = request.POST['sid'].strip()
+                title = request.POST['title'].strip()
+                email = request.POST['email'].strip()
+                phone = request.POST['phone'].strip()
+                user = GPM.objects.get(GP__id=gp, MEMBER__SID=sid)
+                user.TITLE = title
+                user.save()
+                m = user.MEMBER
+                # 驗證 email 正確性
+                try:
+                    validate_email(email)
+                    m.EMAIL = email
                     m.save()
-                pass
-            if phone == "":
-                m.PHONE = None
-                m.save()
-            else:
-                m.PHONE = phone.replace('-', '')
-                m.save()
-        return redirect('SA')
+                except:
+                    if email == "":
+                        m.EMAIL = None
+                        m.save()
+                    pass
+                if phone == "":
+                    m.PHONE = None
+                    m.save()
+                else:
+                    m.PHONE = phone.replace('-', '')
+                    m.save()
+            return redirect('SA')
+    else:
+        return HttpResponse("無此權限")
 
 @login_required
 def GPedit(request, gp):
     """編輯群組成員"""
-    if request.method == 'POST':
-        gp_id = request.POST['gp'].strip()
-        add = request.POST['add'].strip().split(',')
-        remove = request.POST['remove'].strip().split(',')
-        gp = GP.objects.get(id=gp_id)
-        for i in add:
-            sid = i.strip()
-            if sid.strip() != '' and Member.objects.filter(SID=sid).exists() and not GPM.objects.filter(GP=gp, MEMBER__SID=sid).exists():
-                m = Member.objects.get(SID=sid)
-                GPM.objects.create(GP=gp, MEMBER=m)
-        for i in remove:
-            sid = i.strip()
-            if sid.strip() != '' and Member.objects.filter(SID=sid).exists() and GPM.objects.filter(GP=gp, MEMBER__SID=sid).exists():
-                GPM.objects.filter(GP=gp, MEMBER__SID=sid).delete()
-        return redirect(group_detail, gp_id)
-    return render(request, 'Group/GPedit.html', locals())
+    if UserPerms.objects.filter(user = request.user.id, gp = gp, edit = True):
+        if request.method == 'POST':
+            gp_id = request.POST['gp'].strip()
+            add = request.POST['add'].strip().split(',')
+            remove = request.POST['remove'].strip().split(',')
+            gp = GP.objects.get(id=gp_id)
+            for i in add:
+                sid = i.strip()
+                if sid.strip() != '' and Member.objects.filter(SID=sid).exists() and not GPM.objects.filter(GP=gp, MEMBER__SID=sid).exists():
+                    m = Member.objects.get(SID=sid)
+                    GPM.objects.create(GP=gp, MEMBER=m)
+            for i in remove:
+                sid = i.strip()
+                if sid.strip() != '' and Member.objects.filter(SID=sid).exists() and GPM.objects.filter(GP=gp, MEMBER__SID=sid).exists():
+                    GPM.objects.filter(GP=gp, MEMBER__SID=sid).delete()
+            return redirect(group_detail, gp_id)
+        return render(request, 'Group/GPedit.html', locals())
+    else:
+        return HttpResponse("無此權限")
+    
 
 
 def parse_google_sheet(url, SID, CNAME, VIP):

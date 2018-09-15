@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+# from django.conf import settings
 
 
 class Member(models.Model):
@@ -23,9 +25,22 @@ class GP(models.Model):
     GNAME = models.CharField( max_length=30, verbose_name='社團名稱')
     created_at = models.DateTimeField( auto_now_add=True, verbose_name='建立時間')
     updated_at = models.DateTimeField( auto_now=True, verbose_name='建立時間')
-
+    users = models.ManyToManyField(
+        User,
+        through='UserPerms',
+        # through_fields=('user', 'gp'),
+        related_name ='perms'
+    )
+    
     def __str__(self):
         return self.GNAME
+
+
+class UserPerms(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    gp = models.ForeignKey(GP, on_delete=models.CASCADE)
+    view = models.BooleanField()
+    edit = models.BooleanField()
 
 
 class GPM(models.Model):
