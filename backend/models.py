@@ -39,8 +39,13 @@ class GP(models.Model):
 class UserPerms(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     gp = models.ForeignKey(GP, on_delete=models.CASCADE)
-    view = models.BooleanField()
     edit = models.BooleanField()
+
+    def __str__(self):
+        message = '不可編輯'
+        if self.edit:
+            message = '可編輯'
+        return str(self.user) + ' ' + str(self.gp) + ' ' + message
 
 
 class GPM(models.Model):

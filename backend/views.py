@@ -30,7 +30,7 @@ def index(request):
 @login_required
 def group_list(request):
     gp_list = []
-    for item in UserPerms.objects.filter(user = request.user.id, view = True):
+    for item in UserPerms.objects.filter(user = request.user.id):
         gp_list.append(item.gp)
     # print(gp_list)
     # gp_list = GP.objects.all()
@@ -39,7 +39,7 @@ def group_list(request):
 
 @login_required
 def group_detail(request, uid):
-    if UserPerms.objects.filter(user = request.user.id, gp = uid, view = True):
+    if UserPerms.objects.filter(user = request.user.id, gp = uid):
         edit = UserPerms.objects.get(user = request.user.id, gp = uid).edit
         gp = GP.objects.get(id=uid)
         gp_member = GPM.objects.filter(GP__id=uid)
