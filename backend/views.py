@@ -163,6 +163,8 @@ def googleSheet(request, UID=0):
         return render(request, 'GoogleSheet/sheet.html', locals())
 
     else:
-        sheet = GoogleSheet.objects.all()
+        gp = UserPerms.objects.filter(user=request.user.id)
+        gp_list = [i.gp for i in gp]
+        sheet = GoogleSheet.objects.filter(gp__in=gp_list)
 
     return render(request, 'GoogleSheet/list.html', locals())
