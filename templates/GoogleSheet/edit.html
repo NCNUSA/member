@@ -1,0 +1,25 @@
+<html>
+<title>新增表單</title>
+<body>
+<h1>新增群組</h1>
+<form method="POST">
+{% csrf_token %}
+<input type="hidden" name="id" value="{{ gs.id }}">
+<ul>
+    <li>名稱： <input name="title" value="{{ gs.TITLE }}"></li>
+    <li>網址： <input name="url" value="{{ gs.URL }}" placeholder="發布的連結"> 在 Google 試算表中，檔案 > 發佈到網路 > 發佈 > 複製那個連結</li>
+    <li>群組：
+        <select name="gp">
+            {% for i in gp %}
+            <option value="{{ i.gp.id }}">{{ i.gp.GNAME }}</option>
+            {% endfor %}
+        </select>
+    </li>
+    <li>學號位置： <input name="sid" value="{{ gs.SID }}" type="number" placeholder="選填，數字"></li>
+    <li>中文姓名位置： <input name="cname" value="{{ gs.CNAME }}" type="number" placeholder="選填，數字"></li>
+    <li>是否為會員位置： <input name="vip" value="{{ gs.VIP }}" type="number" placeholder="選填，數字"></li>
+    <li><button type="submit">送出</button> </li>
+</ul>
+</form>
+</body>
+</html>

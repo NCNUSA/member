@@ -165,6 +165,65 @@ def googleSheet(request, UID=0):
     else:
         gp = UserPerms.objects.filter(user=request.user.id)
         gp_list = [i.gp for i in gp]
-        sheet = GoogleSheet.objects.filter(gp__in=gp_list)
+        sheet = GoogleSheet.objects.filter(GP__in=gp_list)
+        return render(request, 'GoogleSheet/list.html', locals())
 
-    return render(request, 'GoogleSheet/list.html', locals())
+def googleSheet_add(request):
+    """新增 Google 表單的結果"""
+    if request.method == "GET":
+        gp = UserPerms.objects.filter(user=request.user.id)
+        return render(request, 'GoogleSheet/add.html', locals())
+    else:
+        title = request.POST["title"]
+        url = request.POST["url"]
+        gp = request.POST["gp"]
+        sid = request.POST["sid"]
+        cname = request.POST["cname"]
+        vip = request.POST["vip"]
+        gp = GP.objects.get(id=gp)
+        if cname == "":
+            cname = None
+        if vip == "":
+            vip = None
+        if sid == "":
+            sid = None
+        if title.strip() != "" and url.strip() != "":
+            GoogleSheet.objects.create(TITLE=title, URL=url, GP=gp, SID=sid, CNAME=cname, VIP=vip)
+        else:
+            return HttpResponse("資料錯誤")
+        return redirect(googleSheet)
+
+def googleSheet_edit(request, UID):
+    """編輯表單基本資料"""
+    if request.method == "GET":
+        gp = UserPerms.objects.filter(user=request.user.id)
+        gs = GoogleSheet.objects.get(id=UID)
+        return render(request, 'GoogleSheet/edit.html', locals())
+    elif request.method == "POST":
+        title = request.POST["title"]
+        url = request.POST["url"]
+        gp = request.POST["gp"]
+        sid = request.POST["sid"]
+        cname = request.POST["cname"]
+        vip = request.POST["vip"]
+        gp = GP.objects.get(id=gp)
+        if cname == "":
+            cname = None
+        if vip == "":
+            vip = None
+        if sid == "":
+            sid = None
+        if title.strip() != "" and url.strip() != "":
+            gs = GoogleSheet.objects.get(id=request.POST["id"])
+            gs.TITLE = title
+            gs.URL = url
+            gs.GP = gp
+            gs.SID = sid
+            gs.CNAME = cname
+            gs.VIP = vip
+            gs.save()
+        else:
+            return HttpResponse("資料錯誤")
+        return redirect(googleSheet)
+
+

@@ -32,16 +32,18 @@
         <!-- container -->
         <div class="container mt-5">
 
-
-            <table class="table table-hover">
+            <button class="btn btn-info" onclick="location.href = '{% url 'GoogleSheet.add' %}'">新增</button>
+            <table class="table table-hover mt-3">
                 <tr>
                     <th>名稱（點擊查看）</th>
                     <th>原始網址</th>
+                    <th>編輯</th>
                 </tr>
                 {% for i in sheet %}
                 <tr>
                     <td><a href="{{ i.id }}">{{ i.TITLE }}</a></td>
                     <td><a href="{{ i.URL }}">連結</a></td>
+                    <td><a href="{% url 'GoogleSheet.edit' i.id %}">編輯</a></td>
                 </tr>
                 {%  endfor %}
             </table>
