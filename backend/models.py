@@ -87,6 +87,7 @@ class GoogleSheet(models.Model):
     SID = models.IntegerField( verbose_name='學號欄位', blank=True, null=True )
     CNAME = models.IntegerField( verbose_name='中文名稱欄位', blank=True, null=True)
     VIP = models.IntegerField( verbose_name='是否為學生會員欄位', blank=True, null=True )
+    EMAIL = models.IntegerField( verbose_name='EMAIL 在第幾欄', blank=True, null=True )
     GP = models.ForeignKey(GP, on_delete=models.CASCADE)
 
     def __str__(self):

@@ -159,7 +159,10 @@ def googleSheet(request, UID=0):
         except:
             return HttpResponse("找不到該表單，請聯絡開發人員")
         table = parse_google_sheet(sheet.URL, sheet.SID, sheet.CNAME, sheet.VIP)
-        amount = len(table) - 1
+        thead = table[0]
+        tbody = table[1:]
+        amount = len(tbody)
+        SID, CNAME, VIP, EMAIL = sheet.SID, sheet.CNAME, sheet.VIP, sheet.EMAIL
         return render(request, 'GoogleSheet/sheet.html', locals())
 
     else:
@@ -180,6 +183,7 @@ def googleSheet_add(request):
         sid = request.POST["sid"]
         cname = request.POST["cname"]
         vip = request.POST["vip"]
+        email = request.POST["email"]
         gp = GP.objects.get(id=gp)
         if cname == "":
             cname = None
@@ -188,7 +192,7 @@ def googleSheet_add(request):
         if sid == "":
             sid = None
         if title.strip() != "" and url.strip() != "":
-            GoogleSheet.objects.create(TITLE=title, URL=url, GP=gp, SID=sid, CNAME=cname, VIP=vip)
+            GoogleSheet.objects.create(TITLE=title, URL=url, GP=gp, SID=sid, CNAME=cname, VIP=vip, EMAIL=email)
         else:
             return HttpResponse("資料錯誤")
         return redirect(googleSheet)
@@ -206,6 +210,7 @@ def googleSheet_edit(request, UID):
         sid = request.POST["sid"]
         cname = request.POST["cname"]
         vip = request.POST["vip"]
+        email = request.POST["email"]
         gp = GP.objects.get(id=gp)
         if cname == "":
             cname = None
@@ -221,6 +226,7 @@ def googleSheet_edit(request, UID):
             gs.SID = sid
             gs.CNAME = cname
             gs.VIP = vip
+            gs.EMAIL = email
             gs.save()
         else:
             return HttpResponse("資料錯誤")

@@ -1,7 +1,7 @@
 <html>
-<title>新增表單</title>
+<title>編輯表單基本資料</title>
 <body>
-<h1>新增群組</h1>
+<h1>編輯表單基本資料</h1>
 <form method="POST">
 {% csrf_token %}
 <input type="hidden" name="id" value="{{ gs.id }}">
@@ -18,6 +18,7 @@
     <li>學號位置： <input name="sid" value="{{ gs.SID }}" type="number" placeholder="選填，數字"></li>
     <li>中文姓名位置： <input name="cname" value="{{ gs.CNAME }}" type="number" placeholder="選填，數字"></li>
     <li>是否為會員位置： <input name="vip" value="{{ gs.VIP }}" type="number" placeholder="選填，數字"></li>
+    <li>Email 位置： <input name="email" value="{{ gs.EMAIL }}" type="number" placeholder="選填，數字"></li>
     <li><button type="submit">送出</button> </li>
 </ul>
 </form>
