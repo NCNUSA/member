@@ -4,10 +4,8 @@
     </head>
     <body>
         <h1>編輯用戶</h1>
-        <form method="POST" action="{% url 'edit.save' %}">
+        <form method="POST">
             {% csrf_token %}
-            <input type="hidden" name='gp' value="{{ gp }}">
-            <input type="hidden" name='sid' value="{{ sid }}">
             <ul>
                 <li>
                     姓名：

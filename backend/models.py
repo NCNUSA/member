@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+# from django.conf import settings
 
 
 class Member(models.Model):
@@ -23,9 +25,27 @@ class GP(models.Model):
     GNAME = models.CharField( max_length=30, verbose_name='社團名稱')
     created_at = models.DateTimeField( auto_now_add=True, verbose_name='建立時間')
     updated_at = models.DateTimeField( auto_now=True, verbose_name='建立時間')
-
+    users = models.ManyToManyField(
+        User,
+        through='UserPerms',
+        # through_fields=('user', 'gp'),
+        related_name ='perms'
+    )
+    
     def __str__(self):
         return self.GNAME
+
+
+class UserPerms(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    gp = models.ForeignKey(GP, on_delete=models.CASCADE)
+    edit = models.BooleanField()
+
+    def __str__(self):
+        message = '不可編輯'
+        if self.edit:
+            message = '可編輯'
+        return str(self.user) + ' ' + str(self.gp) + ' ' + message
 
 
 class GPM(models.Model):
@@ -67,6 +87,8 @@ class GoogleSheet(models.Model):
     SID = models.IntegerField( verbose_name='學號欄位', blank=True, null=True )
     CNAME = models.IntegerField( verbose_name='中文名稱欄位', blank=True, null=True)
     VIP = models.IntegerField( verbose_name='是否為學生會員欄位', blank=True, null=True )
+    EMAIL = models.IntegerField( verbose_name='EMAIL 在第幾欄', blank=True, null=True )
+    GP = models.ForeignKey(GP, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.TITLE
+        return self.GP.GNAME + ' - ' + self.TITLE

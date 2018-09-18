@@ -14,6 +14,8 @@
                 crossorigin="anonymous"></script>
         <script src="{% static 'js/jquery.tabletoCSV.js' %}"></script>
 
+        <script src="{% static 'js/jquery.tablesorter.js' %}"></script>
+
 </head>
 
 <body>
@@ -26,7 +28,7 @@
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                                 <a class="nav-item nav-link" href="{% url 'index' %}">會員搜尋</a>
-                                <a class="nav-item nav-link active" href="#">群組</a>
+                                <a class="nav-item nav-link active" href="{% url 'gp.list' %}">群組</a>
                                 <a class="nav-item nav-link" href="{% url 'GoogleSheet' %}">表單資料</a>
                                 <a class="nav-item nav-link" href="{% url 'admin:index' %}">管理後台</a>
                                 <a class="nav-item nav-link" href="{% url 'logout' %}">登出</a>
@@ -35,45 +37,52 @@
         </nav>
         <!-- container -->
         <div class="container mt-3">
-            <h2>{{ gp.GNAME }}名單</h2>
-            <button class="btn btn-info" onclick="show();">列出所有學校信箱</button>
-            <button class="btn btn-warning" onclick="location.href = '{% url 'gp.edit' gp.id %}';">編輯群組</button>
-            <button class="btn" id="export" data-export="export">匯出資料</button>
-            <span class="badge badge-secondary">人數：{{ gp_member|length }}</span>
-            <p id="ShowEmail"></p>
-            {% if gp_member%}
-            <table class="table table-hover">
-                    <thead class="thead-dark">
-                            <tr>
-                                    <th>學號</th>
-                                    <th>姓名</th>
-                                    <th>職稱</th>
-                                    <th>系所</th>
-                                    <th>年級</th>
-                                    <th>私人信箱</th>
-                                    <th>手機</th>
-                                    <th>加入日期</th>
-                            </tr>
-                    </thead>
-                    <tbody>
-                            {% for row in gp_member %}
-                            <tr>
-                                    <td>
-                                            <a class='SID' href="{% url 'edit' row.GP.id row.MEMBER.SID %}">{{row.MEMBER.SID}}</a>
-                                    </td>
-                                    <td> {{ row.MEMBER.CNAME }} </td>
-                                    <td> {{ row.TITLE | default:"" }}</td>
-                                    <td> {{ row.MEMBER.DEP }} </td>
-                                    <td> {{ row.MEMBER.GRADE }} </td>
-                                    <td> {{ row.MEMBER.EMAIL | default:"" }} </td>
-                                    <td> {{ row.MEMBER.PHONE | default:"" }} </td>
-                                    <td> {{ row.created_at | default:"" }} </td>
-                            </tr>
-                            {% endfor %}
-                    </tbody>
-            </table>
+                <h2>{{ gp.GNAME }}名單</h2>
+                <button class="btn btn-info" onclick="show();">列出所有學校信箱</button>
+                {% if edit %}
+                <button class="btn btn-warning" onclick="location.href = '{% url 'gp.edit' gp.id %}';">編輯群組</button>
+                {% endif %}
+                <button class="btn" id="export" data-export="export">匯出資料</button>
+                <span class="badge badge-secondary">人數：{{ gp_member|length }}</span>
+                <p id="ShowEmail"></p>
+                {% if gp_member %}
+                <table class="table table-hover">
+                        <thead class="thead-dark">
+                                <tr>
+                                        <th>學號</th>
+                                        <th>姓名</th>
+                                        <th>職稱</th>
+                                        <th>系所</th>
+                                        <th>年級</th>
+                                        <th>私人信箱</th>
+                                        <th>手機</th>
+                                        <th>加入日期</th>
+                                </tr>
+                        </thead>
+                        <tbody>
+                                {% for row in gp_member %}
+                                <tr>
+                                        <td>
+                                                {% if edit %}
+                                                    <a class='SID' href="{% url 'edit' row.GP.id row.MEMBER.SID %}">{{row.MEMBER.SID}}</a>
+                                                {% else %}
+                                                    <p class="SID">{{ row.MEMBER.SID }}</p>
+                                                {% endif %}
+                                        </td>
+
+                                        <td> {{ row.MEMBER.CNAME }} </td>
+                                        <td> {{ row.TITLE | default:"" }}</td>
+                                        <td> {{ row.MEMBER.DEP }} </td>
+                                        <td> {{ row.MEMBER.GRADE }} </td>
+                                        <td> {{ row.MEMBER.EMAIL | default:"" }} </td>
+                                        <td> {{ row.MEMBER.PHONE | default:"" }} </td>
+                                        <td> {{ row.created_at | default:"" }} </td>
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+                </table>
+                {% endif %}
         </div>
-        {% endif %}
         <script src="{% static 'js/detail.js' %}"></script>
 </body>
 

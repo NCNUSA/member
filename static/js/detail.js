@@ -17,3 +17,5 @@ function show() {
 $("#export").click(function() {
   $("table").tableToCSV();
 });
+
+$("table").tablesorter();
