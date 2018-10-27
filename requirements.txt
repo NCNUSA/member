@@ -4,3 +4,4 @@ requests
 ipython
 selenium
 bs4
+line-bot-sdk==1.8.0

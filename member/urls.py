@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, url
 from backend import views
 
 admin.autodiscover()
@@ -31,4 +31,5 @@ urlpatterns = [
     path('GoogleSheet/<int:UID>', views.googleSheet, name='GoogleSheet.detail'),
     path('GoogleSheet/edit/<int:UID>', views.googleSheet_edit, name='GoogleSheet.edit'),
     path('accounts/', include('django.contrib.auth.urls')),
+    url(r'^bot/', include('line_bot.urls')),
 ]
