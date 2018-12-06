@@ -11,7 +11,7 @@ class Staff(models.Model):
 
 
 class RecvMSG(models.Model):
-    user_id = models.CharField(max_length=100, unique=True, verbose_name='LINE User ID')
+    user_id = models.CharField(max_length=100, verbose_name='LINE User ID')
     display_name = models.CharField(max_length=20, verbose_name='名稱', blank=True, null=True)
     MSG = models.TextField(verbose_name='訊息', blank=True, null=True)
     picture_url = models.URLField(blank=True, null=True)
