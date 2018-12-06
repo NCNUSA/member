@@ -9,4 +9,10 @@ class StaffAdmin(admin.ModelAdmin):
     search_fields = ["user_id", "CNAME"]
 
 
+class RecvMSGAdmin(admin.ModelAdmin):
+    list_display = ("user_id", "display_name", "MSG", "created_at")
+    search_fields = ["user_id", "display_name", "MSG", "created_at"]
+
+
 admin.site.register(Staff, StaffAdmin)
+admin.site.register(RecvMSG, RecvMSGAdmin)

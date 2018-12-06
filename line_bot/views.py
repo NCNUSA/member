@@ -7,7 +7,7 @@ from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextSendMessage
 from backend.models import Member, GPM
-from .models import Staff
+from .models import Staff, RecvMSG
 
 
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
@@ -100,7 +100,8 @@ def callback(request):
                     event.reply_token,
                    TextSendMessage(text=resp)
                 )
-                print(event.source)
+                profile = line_bot_api.get_profile(user_id)
+                RecvMSG.objects.create(user_id=user_id, display_name=profile.display_name, MSG=recv)
         return HttpResponse()
     else:
         return HttpResponseBadRequest()
