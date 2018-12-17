@@ -94,3 +94,4 @@ Django_venv
 *.swp
 nohup.out
 .idea/workspace.xml
+public/*

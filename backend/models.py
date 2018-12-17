@@ -35,6 +35,23 @@ class GP(models.Model):
     def __str__(self):
         return self.GNAME
 
+    def is_member(sid, gp):
+        try:
+            gp = GP.objects.get(id=gp)
+        except:
+            return 'GP is wrong'
+
+        try:
+            m = Member.objects.get(SID=sid)
+        except:
+            return 'SID is wrong'
+
+        try:
+            GPM.objects.get(MEMBER=m, GP=gp)
+        except:
+            return 'not Member'
+
+        return 1
 
 class UserPerms(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

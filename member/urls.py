@@ -31,6 +31,7 @@ urlpatterns = [
     path('GoogleSheet/new', views.googleSheet_add, name='GoogleSheet.add'),
     path('GoogleSheet/<int:UID>', views.googleSheet, name='GoogleSheet.detail'),
     path('GoogleSheet/edit/<int:UID>', views.googleSheet_edit, name='GoogleSheet.edit'),
+    path('sheet_check', views.sheet_check, name='sheet_check'),
     path('accounts/', include('django.contrib.auth.urls')),
     url(r'^bot/', include('line_bot.urls')),
 ]

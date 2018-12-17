@@ -4,6 +4,11 @@ from .models import *
 from django.http import HttpResponse
 from django.core.validators import validate_email
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+import xlrd
+import datetime
+from django.core.files.storage import FileSystemStorage
+from .forms import SheetCheckForm
 
 
 def Qfunction(query):
@@ -21,7 +26,7 @@ def Qfunction(query):
 def index(request):
     if 'Q' in request.GET:
         query = request.GET['Q'].strip().split()
-        result = Member.objects.filter( Qfunction(query) )
+        result = Member.objects.filter(Qfunction(query))
         return render(request, 'index.html', locals())
     else:
         return render(request, 'index.html')
@@ -30,7 +35,7 @@ def index(request):
 @login_required
 def group_list(request):
     gp_list = []
-    for item in UserPerms.objects.filter(user = request.user.id):
+    for item in UserPerms.objects.filter(user=request.user.id):
         gp_list.append(item.gp)
     # print(gp_list)
     # gp_list = GP.objects.all()
@@ -39,8 +44,8 @@ def group_list(request):
 
 @login_required
 def group_detail(request, uid):
-    if UserPerms.objects.filter(user = request.user.id, gp = uid):
-        edit = UserPerms.objects.get(user = request.user.id, gp = uid).edit
+    if UserPerms.objects.filter(user=request.user.id, gp=uid):
+        edit = UserPerms.objects.get(user=request.user.id, gp=uid).edit
         gp = GP.objects.get(id=uid)
         gp_member = GPM.objects.filter(GP__id=uid)
         return render(request, 'Group/detail.html', locals())
@@ -51,7 +56,7 @@ def group_detail(request, uid):
 @login_required
 def edit(request, gp=0, sid=0):
     """編輯群組成員的職稱"""
-    if UserPerms.objects.filter(user = request.user.id, gp = gp, edit = True):
+    if UserPerms.objects.filter(user=request.user.id, gp=gp, edit=True):
         if request.method == "GET":
             user = GPM.objects.get(GP__id=gp, MEMBER__SID=sid)
             return render(request, 'Group/edit.html', locals())
@@ -83,10 +88,11 @@ def edit(request, gp=0, sid=0):
     else:
         return HttpResponse("無此權限")
 
+
 @login_required
 def GPedit(request, gp):
     """編輯群組成員"""
-    if UserPerms.objects.filter(user = request.user.id, gp = gp, edit = True):
+    if UserPerms.objects.filter(user=request.user.id, gp=gp, edit=True):
         if request.method == 'POST':
             gp_id = request.POST['gp'].strip()
             add = request.POST['add'].strip().split(',')
@@ -94,18 +100,19 @@ def GPedit(request, gp):
             gp = GP.objects.get(id=gp_id)
             for i in add:
                 sid = i.strip()
-                if sid.strip() != '' and Member.objects.filter(SID=sid).exists() and not GPM.objects.filter(GP=gp, MEMBER__SID=sid).exists():
+                if sid.strip() != '' and Member.objects.filter(SID=sid).exists() and not GPM.objects.filter(GP=gp,
+                                                                                                            MEMBER__SID=sid).exists():
                     m = Member.objects.get(SID=sid)
                     GPM.objects.create(GP=gp, MEMBER=m)
             for i in remove:
                 sid = i.strip()
-                if sid.strip() != '' and Member.objects.filter(SID=sid).exists() and GPM.objects.filter(GP=gp, MEMBER__SID=sid).exists():
+                if sid.strip() != '' and Member.objects.filter(SID=sid).exists() and GPM.objects.filter(GP=gp,
+                                                                                                        MEMBER__SID=sid).exists():
                     GPM.objects.filter(GP=gp, MEMBER__SID=sid).delete()
             return redirect(group_detail, gp_id)
         return render(request, 'Group/GPedit.html', locals())
     else:
         return HttpResponse("無此權限")
-    
 
 
 def parse_google_sheet(url, SID, CNAME, VIP):
@@ -117,7 +124,7 @@ def parse_google_sheet(url, SID, CNAME, VIP):
     opts.add_argument("--headless")
     driver = webdriver.Firefox(firefox_options=opts)
     driver.get(url)
-    bsObj = BeautifulSoup( driver.page_source, "html.parser" )
+    bsObj = BeautifulSoup(driver.page_source, "html.parser")
     rows = bsObj.find("table").find("tbody").find_all("tr")
     # 每列資料都塞在這裡面
     table = []
@@ -129,7 +136,7 @@ def parse_google_sheet(url, SID, CNAME, VIP):
         table.append(tmp_list)
     # Google form 輸出結果第二行會是空白，將之移除
     try:
-        table.remove([""]*len(table[0]))
+        table.remove([""] * len(table[0]))
     except:
         pass
     # 判斷姓名是否跟學號匹配
@@ -139,7 +146,7 @@ def parse_google_sheet(url, SID, CNAME, VIP):
                 row.append("姓名是否匹配")
                 continue
             try:
-                m = Member.objects.get(SID=row[SID-1])
+                m = Member.objects.get(SID=row[SID - 1])
                 if row[CNAME - 1] != m.CNAME:
                     row.append("錯誤(學生會資料庫：" + m.CNAME + ")")
                 else:
@@ -171,6 +178,8 @@ def googleSheet(request, UID=0):
         sheet = GoogleSheet.objects.filter(GP__in=gp_list)
         return render(request, 'GoogleSheet/list.html', locals())
 
+
+@login_required
 def googleSheet_add(request):
     """新增 Google 表單的結果"""
     if request.method == "GET":
@@ -197,6 +206,8 @@ def googleSheet_add(request):
             return HttpResponse("資料錯誤")
         return redirect(googleSheet)
 
+
+@login_required
 def googleSheet_edit(request, UID):
     """編輯表單基本資料"""
     if request.method == "GET":
@@ -233,3 +244,30 @@ def googleSheet_edit(request, UID):
         return redirect(googleSheet)
 
 
+@login_required
+def sheet_check(request):
+    if request.method == 'POST':
+        form = SheetCheckForm(request.POST, request.FILES)
+        if form.is_valid():
+            origin_name = form.cleaned_data['spreadsheet'].name
+            fs = FileSystemStorage()
+            dt = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+            filename = fs.save(dt + '_' + origin_name, form.cleaned_data['spreadsheet'])
+            url = fs.url(filename)
+            data = xlrd.open_workbook(settings.MEDIA_ROOT + '/' + filename)
+            table = data.sheets()[0]
+            t = table.col_values(5)[1:]
+            wrong = ''
+            for row in t:
+                try:
+                    # 強制將 float 轉型成 str, e.g. '104321031.0'
+                    msg = GP.is_member(sid=str(int(float(row))), gp=str(1))
+                    if msg is str():
+                        wrong += row + msg + '<br>'
+                except:
+                    wrong += row + ' unrecognized problem'
+            return HttpResponse(wrong)
+        return render(request, 'xls_check/upload.html', locals())
+    else:
+        form = SheetCheckForm()
+    return render(request, 'xls_check/upload.html', locals())
