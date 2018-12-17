@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 import environ
 
-root = environ.Path(__file__) - 3 # three folder back (/a/b/c/ - 3 = /)
+root = environ.Path(__file__) - 2 # three folder back (/a/b/ - 2 = /)
 env = environ.Env(DEBUG=(bool, False),) # set default values and casting
 environ.Env.read_env('.env') # reading .env file
 
@@ -133,7 +133,7 @@ USE_TZ = True
 
 public_root = root.path('public/')
 
-MEDIA_ROOT = public_root('media')
+MEDIA_ROOT = public_root('media/')
 MEDIA_URL = '/media/'
 # STATIC_ROOT = public_root('static')
 STATIC_URL = '/static/'
