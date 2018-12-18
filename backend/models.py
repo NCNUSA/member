@@ -3,6 +3,19 @@ from django.contrib.auth.models import User
 # from django.conf import settings
 
 
+class MemberManager(models.Manager):
+    def name_check(self, sid, cname):
+        try:
+            record = self.get(SID=sid).CNAME
+        except Member.DoesNotExist:
+            raise ValueError('SID is wrong')
+
+        if record != cname:
+            return record
+        else:
+            return True
+
+
 class Member(models.Model):
     SID = models.CharField( max_length=10, unique=True, verbose_name='學號')
     CNAME = models.CharField( max_length=20, verbose_name='中文姓名')
@@ -16,9 +29,28 @@ class Member(models.Model):
     ADDR = models.CharField( max_length=200, blank=True, null=True, verbose_name='住址')
     created_at = models.DateTimeField( auto_now_add=True, verbose_name='建立時間')
     updated_at = models.DateTimeField( auto_now=True, verbose_name='修改時間')
+    objects = MemberManager()
 
     def __str__(self):
         return self.SID + ' ' + self.CNAME
+
+
+class GPManager(models.Manager):
+    def member_check(self, sid, gp):
+        try:
+            gp = self.get(id=gp)
+        except GP.DoesNotExist:
+            raise LookupError('GP is wrong')
+
+        try:
+            m = Member.objects.get(SID=sid)
+        except Member.DoesNotExist:
+            raise ValueError('SID is wrong')
+
+        if GPM.objects.filter(MEMBER=m, GP=gp).exists():
+            return True
+        else:
+            return False
 
 
 class GP(models.Model):
@@ -31,27 +63,11 @@ class GP(models.Model):
         # through_fields=('user', 'gp'),
         related_name ='perms'
     )
+    objects = GPManager()
     
     def __str__(self):
         return self.GNAME
 
-    def is_member(sid, gp):
-        try:
-            gp = GP.objects.get(id=gp)
-        except:
-            return 'GP is wrong'
-
-        try:
-            m = Member.objects.get(SID=sid)
-        except:
-            return 'SID is wrong'
-
-        try:
-            GPM.objects.get(MEMBER=m, GP=gp)
-        except:
-            return 'not Member'
-
-        return 1
 
 class UserPerms(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

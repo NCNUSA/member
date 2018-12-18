@@ -15,7 +15,7 @@ def Qfunction(query):
     """類 Google 搜尋，採用 AND"""
     QQuery = None
     for i in query:
-        if QQuery == None:
+        if QQuery is None:
             QQuery = Q(Q(SID__contains=i) | Q(GRADE__contains=i) | Q(DEP__contains=i) | Q(CNAME__contains=i))
         else:
             QQuery &= Q(Q(SID__contains=i) | Q(GRADE__contains=i) | Q(DEP__contains=i) | Q(CNAME__contains=i))
@@ -140,7 +140,7 @@ def parse_google_sheet(url, SID, CNAME, VIP):
     except:
         pass
     # 判斷姓名是否跟學號匹配
-    if SID != None and CNAME != None:
+    if SID is not None and CNAME is not None:
         for index, row in enumerate(table):
             if index == 0:
                 row.append("姓名是否匹配")
@@ -256,17 +256,48 @@ def sheet_check(request):
             url = fs.url(filename)
             data = xlrd.open_workbook(settings.MEDIA_ROOT + '/' + filename)
             table = data.sheets()[0]
-            t = table.col_values(5)[1:]
+            sid_pos = form.cleaned_data['sid']
+            is_member__pos = form.cleaned_data['is_member']
+            name_pos = form.cleaned_data['name']
+            email_pos = form.cleaned_data['email']
+            sid_col = table.col_values(sid_pos-1)[1:]
+            member_sign_col = table.col_values(is_member__pos-1)[1:]
+            name_col = table.col_values(name_pos-1)[1:]
+            email_col = table.col_values(email_pos-1)[1:]
             wrong = ''
-            for row in t:
-                try:
+            email_list = ''
+            for key, row in enumerate(sid_col):
                     # 強制將 float 轉型成 str, e.g. '104321031.0'
-                    msg = GP.is_member(sid=str(int(float(row))), gp=str(1))
-                    if msg is str():
-                        wrong += row + msg + '<br>'
-                except:
-                    wrong += row + ' unrecognized problem'
-            return HttpResponse(wrong)
+                    try:
+                        sid = str(int(float(row)))
+                    except ValueError:
+                        wrong += row + ' 學號錯誤<br>'
+                        continue
+                    try:
+                        # member_check
+                        # gp=2 是付費會員
+                        if GP.objects.member_check(sid=sid, gp=str(2)):
+                            if member_sign_col[key] == '否':
+                                wrong += sid + ' 是會員填成否<br>'
+                        else:
+                            if member_sign_col[key] == '是':
+                                wrong += sid + ' 不是會員填成是<br>'
+                        # name check
+                        if name_pos != 0:
+                            record_name = Member.objects.name_check(sid=sid, cname=name_col[key])
+                            if type(record_name) == str:
+                                wrong += sid + ' 的名字不該是 "' + name_col[key] + '"而是' + record_name + '"<br>'
+                        # email list
+                        if email_pos != 0:
+                            email_list += email_col[key] + ', '
+                    except ValueError:
+                        wrong += sid + ' 學號錯誤<br>'
+                    except LookupError:
+                        wrong += 'GP 錯誤，找不到該 GP<br>若您不清楚錯誤，請聯絡開發人員'
+                        break
+            wrong = '<b>' + wrong + '</b>'
+
+            return HttpResponse(wrong + '<br> <b>Email list:</b> ' + email_list)
         return render(request, 'xls_check/upload.html', locals())
     else:
         form = SheetCheckForm()
