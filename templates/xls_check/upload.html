@@ -31,18 +31,30 @@
 					<a class="nav-item nav-link" href="{% url 'index' %}">會員搜尋</a>
 					<a class="nav-item nav-link" href="{% url 'gp.list' %}">群組</a>
                     <a class="nav-item nav-link" href="{% url 'GoogleSheet' %}">表單資料</a>
-                    <a class="nav-item nav-link" href="{% url 'sheet_check' %}">檢查表單</a>
+                    <a class="nav-item nav-link active" href="{% url 'sheet_check' %}">檢查表單</a>
 					<a class="nav-item nav-link" href="{% url 'admin:index' %}">管理後台</a>
 					<a class="nav-item nav-link" href="{% url 'logout' %}">登出</a>
 				</div>
 			</div>
 
 		</nav>
-		<div class="container mt-4">
+		<div class="container">
             <div class="row">
-                <div class="col-md-12 my-lg-5">
-                    <h2>請上傳 xls/xlsx 文件，並且標明學號、姓名等位置。</h2>
-                    <h3>*若無該項欄位，請填 0 或是留空</h3>
+                <div class="col-md-6 my-lg-3">
+                    <h3>請上傳 Excel (xls/xlsx) 文件</h3>
+                    <h3>並且標明學號、姓名等位置。</h3>
+                    <br>
+                    <h4>若無該項欄位，請填 0 或是留空</h4>
+                </div>
+                <div class="col-md-5 ml-auto my-lg-3">
+                    <h4>此程式功能：</h4>
+                    <ol>
+                        <li>學號是否正確</li>
+                        <li>姓名是否正確</li>
+                        <li>信箱是否正確</li>
+                        <li>是否為付費會員</li>
+                        <li>列出所有信箱</li>
+                    </ol>
                 </div>
             </div>
                 <form class="form" method="POST" enctype="multipart/form-data">
@@ -107,7 +119,7 @@
                             <div class="custom-file">
                               <input name="spreadsheet" type="file" class="custom-file-input"
                                      id="customFile" accept=".xls, .xlsx" required>
-                              <label class="custom-file-label" for="customFile">選擇檔案</label>
+                              <label class="custom-file-label">選擇檔案...</label>
                                 {% if form.spreadsheet.errors %}
                                     {% for error in form.spreadsheet.errors %}
                                         <strong>{{ error }}</strong>

@@ -246,58 +246,65 @@ def googleSheet_edit(request, UID):
 
 @login_required
 def sheet_check(request):
+    """上傳 xls/xlsx，以檢查表單資料是否正確"""
     if request.method == 'POST':
         form = SheetCheckForm(request.POST, request.FILES)
+        # gp=2 是付費會員
+        gp = 2
         if form.is_valid():
-            origin_name = form.cleaned_data['spreadsheet'].name
-            fs = FileSystemStorage()
-            dt = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-            filename = fs.save(dt + '_' + origin_name, form.cleaned_data['spreadsheet'])
-            url = fs.url(filename)
-            data = xlrd.open_workbook(settings.MEDIA_ROOT + '/' + filename)
-            table = data.sheets()[0]
+            # read the data from form and calculate the value
             sid_pos = form.cleaned_data['sid']
             is_member__pos = form.cleaned_data['is_member']
             name_pos = form.cleaned_data['name']
             email_pos = form.cleaned_data['email']
+            # read the data in memory directly
+            input_excel = request.FILES['spreadsheet'].read()
+            data = xlrd.open_workbook(file_contents=input_excel)
+            # handle table columns
+            table = data.sheets()[0]
             sid_col = table.col_values(sid_pos-1)[1:]
             member_sign_col = table.col_values(is_member__pos-1)[1:]
             name_col = table.col_values(name_pos-1)[1:]
             email_col = table.col_values(email_pos-1)[1:]
-            wrong = ''
-            email_list = ''
+            # init msg which will show in front end
+            gp_error, email_list = '', ''
+            sid_error, member_error, name_error, email_error = [], [], [], []
             for key, row in enumerate(sid_col):
                     # 強制將 float 轉型成 str, e.g. '104321031.0'
                     try:
                         sid = str(int(float(row)))
                     except ValueError:
-                        wrong += row + ' 學號錯誤<br>'
+                        sid_error.append(row)
                         continue
                     try:
                         # member_check
-                        # gp=2 是付費會員
-                        if GP.objects.member_check(sid=sid, gp=str(2)):
+                        if GP.objects.member_check(sid=sid, gp=str(gp)):
                             if member_sign_col[key] == '否':
-                                wrong += sid + ' 是會員填成否<br>'
+                                # 是會員填成否
+                                member_error.append((sid, 1))
                         else:
                             if member_sign_col[key] == '是':
-                                wrong += sid + ' 不是會員填成是<br>'
+                                # 不是會員填成是
+                                member_error.append((sid, 2))
                         # name check
                         if name_pos != 0:
                             record_name = Member.objects.name_check(sid=sid, cname=name_col[key])
                             if type(record_name) == str:
-                                wrong += sid + ' 的名字不該是 "' + name_col[key] + '"而是' + record_name + '"<br>'
+                                name_error.append((sid, name_col[key], record_name))
                         # email list
                         if email_pos != 0:
-                            email_list += email_col[key] + ', '
+                            try:
+                                Member.objects.mail_validattion(email_col[key])
+                                email_list += email_col[key] + ', '
+                            except:
+                                email_error.append((sid, email_col[key]))
                     except ValueError:
-                        wrong += sid + ' 學號錯誤<br>'
+                        # 學號錯誤
+                        sid_error.append(sid)
                     except LookupError:
-                        wrong += 'GP 錯誤，找不到該 GP<br>若您不清楚錯誤，請聯絡開發人員'
+                        gp_error += str(gp)
                         break
-            wrong = '<b>' + wrong + '</b>'
-
-            return HttpResponse(wrong + '<br> <b>Email list:</b> ' + email_list)
+            return render(request, 'xls_check/result.html', locals())
         return render(request, 'xls_check/upload.html', locals())
     else:
         form = SheetCheckForm()

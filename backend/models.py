@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+import re
 # from django.conf import settings
 
 
@@ -14,6 +17,25 @@ class MemberManager(models.Manager):
             return record
         else:
             return True
+
+    def mail_validattion(self, email):
+        """檢查 *學生* 的信箱是否填寫正確"""
+        try:
+            validate_email(email)
+            black_list = [
+                '@gmail.com.tw',
+                '@gmial.com',
+                '@mai1.ncnu.edu.tw',
+            ]
+            for b in black_list:
+                if b in email:
+                    raise ValidationError('domain name error')
+            # 學生應該要是 mail1 而不是 mail
+            regex = re.compile(r'10[0-9]{7}@mail.ncnu.edu.tw')
+            if regex.search(email) is not None:
+                raise ValidationError('domain name error')
+        except ValidationError:
+            raise
 
 
 class Member(models.Model):
