@@ -36,7 +36,7 @@
 			<!-- searching box -->
 			<div class="d-flex justify-content-center align-items-center">
 				<form class="form-inline my-5 my-lg-5">
-					<input class="form-control mr-sm-2" type="search" placeholder="something cool..." aria-label="Search" name="Q">
+					<input class="form-control mr-sm-2" type="search" placeholder="something cool..." aria-label="Search" name="Q" value="{{ query }}" required>
 					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 				</form>
 			</div>
@@ -134,18 +134,19 @@
                     </table>
                 </div>
             </div>{% endif %}
+        </div>
 		<script>
-			var email = "";
-				let item = document.getElementsByClassName("SID");
-				for (var i = 0; i < item.length; i++) {
-					email += "s" + item[i].innerHTML.trim() + "@mail1.ncnu.edu.tw, ";
-				}
-				email = email.substr(0, email.length - 2);
-				function show() {
-					document.getElementById("ShowEmail").innerHTML =
-						'<input onmouseover="this.select()" value="' + email + '" />'+
-                    ' <label> **將滑鼠移到欄位中右鍵即可複製**</label>';
-				}
+			let email = "";
+            let item = document.getElementsByClassName("SID");
+            for (var i = 0; i < item.length; i++) {
+                email += "s" + item[i].innerHTML.trim() + "@mail1.ncnu.edu.tw, ";
+            }
+            email = email.substr(0, email.length - 2);
+            function show() {
+                document.getElementById("ShowEmail").innerHTML =
+                    '<input onmouseover="this.select()" value="' + email + '" />'+
+                ' <label> **將滑鼠移到欄位中右鍵即可複製**</label>';
+            }
 		</script>
-
+    </body>
 </html>

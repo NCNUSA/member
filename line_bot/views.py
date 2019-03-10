@@ -1,4 +1,3 @@
-# import 必要的函式庫
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
@@ -6,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextSendMessage
-from backend.models import Member, GPM
+from backend.models import Member, GroupMember
 from .models import Staff, RecvMSG
 
 
@@ -48,7 +47,7 @@ def is_sid(recv):
     # 檢查學號長度
     if len(recv) == 8 or len(recv) == 9:
         # 假定學生會付費會員在 2
-        M = GPM.objects.filter(GP=2, MEMBER__SID=recv)
+        M = GroupMember.objects.filter(GP=2, MEMBER__SID=recv)
         if len(M) == 0:
             M = Member.objects.filter(SID=recv)
             if len(M) > 0:

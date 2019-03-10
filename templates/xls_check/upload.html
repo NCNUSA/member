@@ -60,6 +60,7 @@
             </div>
                 <form class="form" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
+
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label>學號</label>
@@ -86,9 +87,26 @@
                             {% endif %}
                         </div>
                     </div>
+                   <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label>用來檢查會員的群組</label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <select name="gid" class="form-control">
+                                {% for i in gp_list %}
+                                    <option value="{{ i.id }}">{{ i.GNAME }}</option>
+                                {%  endfor %}
+                            </select>
+                            {% if form.gid.errors %}
+                                {% for error in form.sid.errors %}
+                                    <strong>{{ error }}</strong>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label>是否為學生會員</label>
+                            <label>是否為會員</label>
                         </div>
                         <div class="form-group col-md-6">
                             <input name="is_member" value="{{ form.is_member.value }}" type="number" class="form-control" placeholder="數字" min="0">
@@ -136,7 +154,7 @@
                     </div>
                 </form>
             <div class="row">
-                <img  src={% static "img/sheet_check_example.jpg" %}>
+                <img src='{% static "img/sheet_check_example.jpg" %}' alt="sheet check example">
             </div>
         </div>
     </body>

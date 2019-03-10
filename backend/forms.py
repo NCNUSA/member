@@ -30,6 +30,7 @@ class ColPositionField(forms.IntegerField):
 
 
 class SheetCheckForm(forms.Form):
+    gid = ColPositionField(label='目標群組', required=False)
     sid = ColPositionField(label='學號位置', required=False)
     email = ColPositionField(label='電郵位置', required=False)
     is_member = ColPositionField(label='是否為會員位置', required=False)

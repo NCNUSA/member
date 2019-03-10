@@ -25,8 +25,8 @@ class GPMAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Member, MemberAdmin)
-admin.site.register(GP, GPAdmin)
-admin.site.register(GPM, GPMAdmin)
+admin.site.register(Group, GPAdmin)
+admin.site.register(GroupMember, GPMAdmin)
 admin.site.register(College)
 admin.site.register(Department)
 admin.site.register(GoogleSheet)
