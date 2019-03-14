@@ -11,7 +11,7 @@
                 <tr>
                     <td><a href="{{ i.id }}">{{ i.TITLE }}</a></td>
                     <td><a href="{{ i.URL }}">連結</a></td>
-                    <td><a href="{% url 'GoogleSheet.edit' i.id %}">編輯</a></td>
+                    <td><a href="{% url 'GoogleSheet.update' i.id %}">編輯</a></td>
                 </tr>
                 {%  endfor %}
             </table>
