@@ -2,7 +2,7 @@
 ![Python Version](https://img.shields.io/badge/Python-3.6-green.svg)
 ![Django Version](https://img.shields.io/badge/Django-2.1-green.svg)
 
-**詳情請參考 Gitlab Wiki**
+**詳情請參考 Wiki**
 
 該專案願景是能夠讓所有的學生社團都能夠共同使用，以資訊化的系統方便大家管理成員。
 
