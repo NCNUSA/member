@@ -6,6 +6,8 @@
 					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 				</form>
 			</div>
+            <p id="result_exist" style="text-align: center;color: red;"></p>
+
 			<div>
 				<br> {% if result %}
 				<button class="btn btn-info" onclick="show();">列出所有學校信箱</button>
@@ -26,11 +28,11 @@
 					{% for row in result %}
 					<tbody>
 						<tr>
-							<td class='SID' scope="row"> 
-								{{ row.SID }} 
+							<td class='SID' scope="row">
+								{{ row.SID }}
 							</td>
 							<td scope="row">
-								{{ row.CNAME }} 
+								{{ row.CNAME }}
 							</td>
 							<td scope="row">
 								{{ row.DEP }}
@@ -112,5 +114,13 @@
                     '<input onmouseover="this.select()" value="' + email + '" />'+
                 ' <label> **將滑鼠移到欄位中右鍵即可複製**</label>';
             }
+
+
+            let url_obj = new URL(document.URL);
+            let result_length = {{ result|length }};
+            if((url_obj.search).length > 0 && result_length === 0){
+                document.getElementById("result_exist").innerText="查無此人"
+            }
+
 		</script>
 {% endblock %}  

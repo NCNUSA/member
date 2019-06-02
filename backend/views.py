@@ -14,6 +14,8 @@ def index(request):
     """首頁，擁有搜尋會員功能"""
     if 'Q' in request.GET:
         query = request.GET['Q'].strip()
+        if len(query) == 0:
+            return redirect(index)
         search_param = query.split()
         result = Member.objects.query_member(search_param)
         return render(request, 'index.html', locals())
