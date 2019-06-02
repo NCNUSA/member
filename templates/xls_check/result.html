@@ -1,24 +1,29 @@
 {% extends "base/base.html" %}
 {% block content %}
-    {% if gp_error|length > 0 %}
-            <h2>發生錯誤</h2>
-            GP 錯誤，找不到該 GP:{{ gp_error }}<br>若您不清楚錯誤，請聯絡開發人員
-        {% endif %}
 
-        {% if sid_error|length > 0 %}
-            <h2>學號錯誤（或在資料庫中找不到）</h2>
+    {#  莫名錯誤  #}
+    {% if gp_error|length > 0 %}
+        <h2>發生錯誤</h2>
+        GP 錯誤，找不到該 GP:{{ gp_error }}<br>若您不清楚錯誤，請聯絡開發人員
+    {% endif %}
+
+
+    {% for sheet in result %}
+        <h1 style="color: blue;">{{ sheet.name }}</h1>
+        {% if sheet.sid_error|length > 0 %}
+            <h4>學號錯誤（或在資料庫中找不到）</h4>
             <ol>
-            {% for sid in sid_error %}
-                <li>{{ sid }} 學號錯誤</li>
-            {% endfor %}
+                {% for sid in sheet.sid_error %}
+                    <li>{{ sid }} 學號錯誤</li>
+                {% endfor %}
             </ol>
         {% endif %}
 
 
-        {% if member_error|length > 0 %}
-            <h2>會員錯誤</h2>
+        {% if sheet.member_error|length > 0 %}
+            <h4>會員錯誤</h4>
             <ol>
-                {% for sid, type in member_error %}
+                {% for sid, type in sheet.member_error %}
                     {% if type == 1 %}
                         <li>{{ sid }} 是會員填成否</li>
                     {% elif type == 2 %}
@@ -28,30 +33,40 @@
             </ol>
         {% endif %}
 
-        {% if name_error|length > 0 %}
-            <h2>姓名錯誤</h2>
+        {% if sheet.name_error|length > 0 %}
+            <h4>姓名錯誤</h4>
             <ol>
-                {% for sid, name, record in name_error %}
+                {% for sid, name, record in sheet.name_error %}
                     <li>{{ sid }} 的姓名不該是 "{{ name }}" 而是 "{{ record }}"</li>
                 {% endfor %}
             </ol>
         {% endif %}
 
-        {% if email_pos > 0 %}
-            <h2>電郵清單</h2>
-            <input onmouseover="this.select()" value="{{ email_list }}" />&nbsp;
+        {% if sheet.email_pos > 0 %}
+            <h4>電郵清單</h4>
+            <input onmouseover="this.select()" value="{{ sheet.email_list }}"/>
+            &nbsp;
             <b>滑鼠移到上面複製即可</b>
         {% endif %}
 
-        {% if email_error|length > 0 %}
-            <h2>錯誤電郵清單</h2>
+        {% if sheet.email_error|length > 0 %}
+            <h4>錯誤電郵清單</h4>
             下列錯誤電郵將不會顯示在上方電郵清單中
             <ol>
-            {% for sid, email in email_error %}
-                <li>{{ sid }} - {{ email }}</li>
-            {% endfor %}
+                {% for sid, email in sheet.email_error %}
+                    <li>{{ sid }} - {{ email }}</li>
+                {% endfor %}
             </ol>
         {% endif %}
 
-            <button class="btn btn-info" onclick="window.history.back()">重新檢查</button>
+        {% if sheet.no_error %}
+            <h4>沒有錯誤！</h4>
+        {% endif %}
+
+        <hr>
+
+
+    {% endfor %}
+
+    <button class="btn btn-info" onclick="window.history.back()">重新檢查</button>
 {% endblock %}  

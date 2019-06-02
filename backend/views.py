@@ -158,18 +158,21 @@ def sheet_check(request):
         form = SheetCheckForm(request.POST, request.FILES)
         if form.is_valid():
             # read the data from form and calculate the value
+            position = {
+                'sid_pos': form.cleaned_data['sid'],
+                'is_member__pos': form.cleaned_data['is_member'],
+                'name_pos': form.cleaned_data['name'],
+                'email_pos': form.cleaned_data['email']
+            }
             gid = form.cleaned_data['gid']
-            sid_pos = form.cleaned_data['sid']
-            is_member__pos = form.cleaned_data['is_member']
-            name_pos = form.cleaned_data['name']
-            email_pos = form.cleaned_data['email']
             # read the data in memory directly
             input_excel = request.FILES['spreadsheet'].read()
             data = xlrd.open_workbook(file_contents=input_excel)
-            # check the sheet
-            gp_error, email_list, sid_error, member_error, name_error, email_error = \
-                Member.objects.sheet_check(gid, data, sid_pos, name_pos, email_pos,
-                                           is_member__pos)
+            result = []
+            for table in data.sheets():
+                # check the sheet
+                tmp = Member.objects.sheet_check(gid, table, position)
+                result.append(tmp)
             return render(request, 'xls_check/result.html', locals())
         return render(request, 'xls_check/upload.html', locals())
     # GET

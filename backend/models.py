@@ -51,13 +51,12 @@ class MemberManager(models.Manager):
                     DEP__contains=i) | Q(CNAME__contains=i))
         return self.filter(QQuery)
 
-    def sheet_check(self, gp, data, sid_pos, name_pos, email_pos, is_member_pos):
+    def sheet_check(self, gp, table, position):
         # handle table columns
-        table = data.sheets()[0]
-        sid_col = table.col_values(sid_pos - 1)[1:]
-        member_sign_col = table.col_values(is_member_pos - 1)[1:]
-        name_col = table.col_values(name_pos - 1)[1:]
-        email_col = table.col_values(email_pos - 1)[1:]
+        sid_col = table.col_values(position['sid_pos'] - 1)[1:]
+        member_sign_col = table.col_values(position['is_member__pos'] - 1)[1:]
+        name_col = table.col_values(position['name_pos'] - 1)[1:]
+        email_col = table.col_values(position['email_pos'] - 1)[1:]
         # init msg which will show in front end
         gp_error, email_list = '', ''
         sid_error, member_error, name_error, email_error = [], [], [], []
@@ -79,13 +78,13 @@ class MemberManager(models.Manager):
                         # 不是會員填成是
                         member_error.append((sid, 2))
                 # name check
-                if name_pos != 0:
+                if position['name_pos'] != 0:
                     record_name = self.name_check(sid=sid,
                                                   cname=name_col[key])
                     if type(record_name) == str:
                         name_error.append((sid, name_col[key], record_name))
                 # email list
-                if email_pos != 0:
+                if position['email_pos'] != 0:
                     try:
                         self.mail_validation(email_col[key])
                         email_list += email_col[key] + ', '
@@ -97,7 +96,22 @@ class MemberManager(models.Manager):
             except LookupError:
                 gp_error += str(gp)
                 break
-        return gp_error, email_list, sid_error, member_error, name_error, email_error
+        if len(gp_error) == len(sid_error) == len(member_error) == \
+           len(name_error) == len(email_error) == 0:
+            no_error = True
+        else:
+            no_error = False
+        result = {
+                  'name': table.name,
+                  'email_list': email_list,
+                  'gp_error': gp_error,
+                  'sid_error': sid_error,
+                  'member_error': member_error,
+                  'name_error': name_error,
+                  'email_error': email_error,
+                  'no_error': no_error
+                  }
+        return result
 
 
 class Member(models.Model):
@@ -161,7 +175,7 @@ class Group(models.Model):
         related_name='perms'
     )
     objects = GroupManager()
-    
+
     def __str__(self):
         return self.GNAME
 
