@@ -95,3 +95,6 @@ Django_venv
 nohup.out
 .idea/workspace.xml
 public/*
+
+# Sphinx
+doc/_build/*
