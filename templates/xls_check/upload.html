@@ -1,124 +1,129 @@
 {% extends "base/base.html" %}
-{% load staticfiles %}
+{% load static %}
 {% block content %}
-     <div class="row">
-                <div class="col-md-6 my-lg-3">
-                    <h3>請上傳 Excel (xls/xlsx) 文件</h3>
-                    <h3>並且標明學號、姓名等位置。</h3>
-                    <br>
-                    <h4>若無該項欄位，請填 0 或是留空</h4>
-                </div>
-                <div class="col-md-5 ml-auto my-lg-3">
-                    <h4>此程式功能：</h4>
-                    <ol>
-                        <li>學號是否正確</li>
-                        <li>姓名是否正確</li>
-                        <li>信箱是否正確</li>
-                        <li>是否為付費會員</li>
-                        <li>列出所有信箱</li>
-                    </ol>
-                </div>
-            </div>
-                <form class="form" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-6 my-lg-3">
+            <h3>請上傳 Excel (xls/xlsx) 文件</h3>
+            <h3>並且標明學號、姓名等位置。</h3>
+            <br>
+            <h4>若無該項欄位，請填 0 或是留空</h4>
+        </div>
+        <div class="col-md-5 ml-auto my-lg-3">
+            <h4>此程式功能：</h4>
+            <ol>
+                <li>學號是否正確</li>
+                <li>姓名是否正確</li>
+                <li>信箱是否正確</li>
+                <li>是否為付費會員</li>
+                <li>列出所有信箱</li>
+            </ol>
+        </div>
+    </div>
+    <form class="form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
 
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label>學號</label>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <input name="sid" type="number" value="{{ form.sid.value }}" class="form-control" placeholder="數字" min="0">
-                            {% if form.sid.errors %}
-                                {% for error in form.sid.errors %}
-                                    <strong>{{ error }}</strong>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label>電子郵件</label>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <input name="email" value="{{ form.email.value }}" type="number" class="form-control" placeholder="數字" min="0">
-                            {% if form.email.errors %}
-                                {% for error in form.email.errors %}
-                                    <strong>{{ error }}</strong>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    </div>
-                   <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label>用來檢查會員的群組</label>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <select name="gid" class="form-control">
-                                {% for i in gp_list %}
-                                    <option value="{{ i.id }}">{{ i.GNAME }}</option>
-                                {%  endfor %}
-                            </select>
-                            {% if form.gid.errors %}
-                                {% for error in form.sid.errors %}
-                                    <strong>{{ error }}</strong>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label>是否為會員</label>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <input name="is_member" value="{{ form.is_member.value }}" type="number" class="form-control" placeholder="數字" min="0">
-                            {% if form.is_member.errors %}
-                                {% for error in form.is_member.errors %}
-                                    <strong>{{ error }}</strong>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label>姓名</label>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <input name="name" value="{{ form.name.value }}" type="number" class="form-control" placeholder="數字" min="0">
-                            {% if form.name.errors %}
-                                {% for error in form.name.errors %}
-                                    <strong>{{ error }}</strong>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label>上傳檔案</label>
-                        </div>
-                        <div class="form-group">
-                            <div class="custom-file">
-                              <input name="spreadsheet" type="file" class="custom-file-input"
-                                     id="customFile" accept=".xls, .xlsx" required>
-                              <label class="custom-file-label">選擇檔案...</label>
-                                {% if form.spreadsheet.errors %}
-                                    {% for error in form.spreadsheet.errors %}
-                                        <strong>{{ error }}</strong>
-                                    {% endfor %}
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-10">
-                           <button type="submit" class="btn btn-primary">送出查詢</button>
-                        </div>
-                    </div>
-                </form>
-            <div class="row">
-                <div class="col-md-12">
-                    <a href="{% static "img/sheet_check_example.jpg" %}">
-                        <img src='{% static "img/sheet_check_example.jpg" %}' width="100%" alt="sheet check example">
-                    </a>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label>學號</label>
+            </div>
+            <div class="form-group col-md-6">
+                <input name="sid" type="number" value="{{ form.sid.value }}" class="form-control"
+                       placeholder="數字" min="0">
+                {% if form.sid.errors %}
+                    {% for error in form.sid.errors %}
+                        <strong>{{ error }}</strong>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label>電子郵件</label>
+            </div>
+            <div class="form-group col-md-6">
+                <input name="email" value="{{ form.email.value }}" type="number"
+                       class="form-control" placeholder="數字" min="0">
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        <strong>{{ error }}</strong>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label>用來檢查會員的群組</label>
+            </div>
+            <div class="form-group col-md-6">
+                <select name="gid" class="form-control">
+                    {% for i in gp_list %}
+                        <option value="{{ i.id }}">{{ i.GNAME }}</option>
+                    {% endfor %}
+                </select>
+                {% if form.gid.errors %}
+                    {% for error in form.sid.errors %}
+                        <strong>{{ error }}</strong>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label>是否為會員</label>
+            </div>
+            <div class="form-group col-md-6">
+                <input name="is_member" value="{{ form.is_member.value }}" type="number"
+                       class="form-control" placeholder="數字" min="0">
+                {% if form.is_member.errors %}
+                    {% for error in form.is_member.errors %}
+                        <strong>{{ error }}</strong>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label>姓名</label>
+            </div>
+            <div class="form-group col-md-6">
+                <input name="name" value="{{ form.name.value }}" type="number" class="form-control"
+                       placeholder="數字" min="0">
+                {% if form.name.errors %}
+                    {% for error in form.name.errors %}
+                        <strong>{{ error }}</strong>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label>上傳檔案</label>
+            </div>
+            <div class="form-group">
+                <div class="custom-file">
+                    <input name="spreadsheet" type="file" class="custom-file-input"
+                           id="customFile" accept=".xls, .xlsx" required>
+                    <label class="custom-file-label">選擇檔案...</label>
+                    {% if form.spreadsheet.errors %}
+                        {% for error in form.spreadsheet.errors %}
+                            <strong>{{ error }}</strong>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">送出查詢</button>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-md-12">
+            <a href="{% static "img/sheet_check_example.jpg" %}">
+                <img src='{% static "img/sheet_check_example.jpg" %}' width="100%"
+                     alt="sheet check example">
+            </a>
+        </div>
+    </div>
 {% endblock %}  

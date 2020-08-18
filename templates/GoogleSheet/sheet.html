@@ -1,51 +1,51 @@
 {% extends "base/base.html" %}
-{% load staticfiles %}
+{% load static %}
 {% block content %}
     <head>
-    {#  匯出成 CSV #}
-    <script src="{% static 'js/jquery.tabletoCSV.js' %}"></script>
-    {# table 排序 #}
-    <script src="{% static 'js/jquery.tablesorter.js' %}"></script>
+        {#  匯出成 CSV #}
+        <script src="{% static 'js/jquery.tabletoCSV.js' %}"></script>
+        {# table 排序 #}
+        <script src="{% static 'js/jquery.tablesorter.js' %}"></script>
     </head>
 
-        <div class="container mt-5">
-            <h1>{{ sheet.TITLE }}</h1>
-            <label>根據 Google 政策，此資料可能會延遲 5 分鐘。</label>
-            <br>
-            <button class="btn btn-info" onclick="School_Email();">列出所有學校信箱</button>
-            <button class="btn btn-info" onclick="Primary_Email();">列出所有常用信箱</button>
-            <button class="btn" id="export" data-export="export">匯出資料</button>
-            <span class="badge badge-secondary">總筆數：{{ amount }}</span>
-            <p id="ShowEmail"></p>
-            <table class="table table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                    {% for field in thead %}
-                        <th>{{ field }}</th>
-                    {% endfor %}
-                    </tr>
-                </thead>
+    <div class="container mt-5">
+        <h1>{{ sheet.TITLE }}</h1>
+        <label>根據 Google 政策，此資料可能會延遲 5 分鐘。</label>
+        <br>
+        <button class="btn btn-info" onclick="School_Email();">列出所有學校信箱</button>
+        <button class="btn btn-info" onclick="Primary_Email();">列出所有常用信箱</button>
+        <button class="btn" id="export" data-export="export">匯出資料</button>
+        <span class="badge badge-secondary">總筆數：{{ amount }}</span>
+        <p id="ShowEmail"></p>
+        <table class="table table-hover">
+            <thead class="thead-dark">
+            <tr>
+                {% for field in thead %}
+                    <th>{{ field }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
 
-                <tbody>
-                {% for row in tbody %}
-                    <tr>
+            <tbody>
+            {% for row in tbody %}
+                <tr>
                     {% for field in row %}
                         {% if forloop.counter == SID %}
-                        <td class="SID">{{ field }}</td>
+                            <td class="SID">{{ field }}</td>
                         {% elif forloop.counter ==  EMAIL %}
-                        <td class="EMAIL">{{ field }}</td>
+                            <td class="EMAIL">{{ field }}</td>
                         {% else %}
-                        <td>{{ field }}</td>
+                            <td>{{ field }}</td>
                         {% endif %}
                     {% endfor %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <script>
-            var SID = {{ SID }};
-            var EMAIL = {{ EMAIL }};
-        </script>
-        <script src="{% static 'js/sheet.js' %}"></script>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        var SID = {{ SID }};
+        var EMAIL = {{ EMAIL }};
+    </script>
+    <script src="{% static 'js/sheet.js' %}"></script>
 {% endblock %}

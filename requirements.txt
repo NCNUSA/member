@@ -1,4 +1,4 @@
-django>=2.1.6
+Django==3.1
 django-environ==0.4.5
 requests
 ipython
@@ -6,3 +6,5 @@ selenium
 bs4
 line-bot-sdk==1.8.0
 xlrd==1.1.0
+pytest-django==3.9.0
+pytest-xdist==1.33.0
