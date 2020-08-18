@@ -8,16 +8,10 @@ class Migration(migrations.Migration):
     atomic = False
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('backend', '0007_googlesheet_email'),
+        ("backend", "0007_googlesheet_email"),
     ]
 
     operations = [
-        migrations.RenameModel(
-            old_name='GP',
-            new_name='Group',
-        ),
-        migrations.RenameModel(
-            old_name='GPM',
-            new_name='GroupMember',
-        ),
+        migrations.RenameModel(old_name="GP", new_name="Group"),
+        migrations.RenameModel(old_name="GPM", new_name="GroupMember"),
     ]

@@ -5,14 +5,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('backend', '0006_googlesheet_gp'),
-    ]
+    dependencies = [("backend", "0006_googlesheet_gp")]
 
     operations = [
         migrations.AddField(
-            model_name='googlesheet',
-            name='EMAIL',
-            field=models.IntegerField(blank=True, null=True, verbose_name='EMAIL 在第幾欄'),
-        ),
+            model_name="googlesheet",
+            name="EMAIL",
+            field=models.IntegerField(blank=True, null=True, verbose_name="EMAIL 在第幾欄"),
+        )
     ]

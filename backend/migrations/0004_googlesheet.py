@@ -5,20 +5,23 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('backend', '0003_auto_20180817_0635'),
-    ]
+    dependencies = [("backend", "0003_auto_20180817_0635")]
 
     operations = [
         migrations.CreateModel(
-            name='GoogleSheet',
+            name="GoogleSheet",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('TITLE', models.CharField(max_length=100)),
-                ('URL', models.URLField(verbose_name='目標網址')),
-                ('SID', models.IntegerField(blank=True, null=True, verbose_name='學號欄位')),
-                ('CNAME', models.IntegerField(blank=True, null=True, verbose_name='中文名稱欄位')),
-                ('VIP', models.IntegerField(blank=True, null=True, verbose_name='是否為學生會員欄位')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("TITLE", models.CharField(max_length=100)),
+                ("URL", models.URLField(verbose_name="目標網址")),
+                ("SID", models.IntegerField(blank=True, null=True, verbose_name="學號欄位")),
+                ("CNAME", models.IntegerField(blank=True, null=True, verbose_name="中文名稱欄位")),
+                ("VIP", models.IntegerField(blank=True, null=True, verbose_name="是否為學生會員欄位")),
             ],
-        ),
+        )
     ]

@@ -1,13 +1,13 @@
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
-
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextSendMessage
-from backend.models import Member, GroupMember
-from .models import Staff, RecvMSG
 
+from backend.models import GroupMember, Member
+
+from .models import RecvMSG, Staff
 
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
@@ -22,23 +22,25 @@ def is_staff(user_id):
 def is_chinese(word):
     """檢查是否每個字都是中文"""
 
-    return all(u'\u4e00' <= c <= u'\u9fff' for c in word)
+    return all(u"\u4e00" <= c <= u"\u9fff" for c in word)
 
 
 def ncnu_staff_contact(name):
     """查詢教職員資料"""
-    import requests, json
+    import requests
+    import json
+
     r = requests.get("https://bot.moli.rocks/ncnu-staff-contact/" + name)
     r = json.loads(r.text)
     total = len(r) - 1
-    text = ''
+    text = ""
     for index, val in enumerate(r):
         if index == 0:
             continue
         else:
             for f_index, i in enumerate(r[0]):
-                text += i + '：' + val[f_index] + '\n'
-            text += '\n'
+                text += i + "：" + val[f_index] + "\n"
+            text += "\n"
     return total, text
 
 
@@ -51,15 +53,15 @@ def is_sid(recv):
         if len(M) == 0:
             M = Member.objects.filter(SID=recv)
             if len(M) > 0:
-                resp = '非付費會員，' + M[0].DEP + M[0].GRADE
+                resp = "非付費會員，" + M[0].DEP + M[0].GRADE
             else:
-                resp = '找不到此人'
+                resp = "找不到此人"
 
         else:
-            resp = '付費會員！'
-            resp += M[0].MEMBER.CNAME + ': ' + M[0].MEMBER.DEP + M[0].MEMBER.GRADE
+            resp = "付費會員！"
+            resp += M[0].MEMBER.CNAME + ": " + M[0].MEMBER.DEP + M[0].MEMBER.GRADE
     else:
-        resp = '學號格式不正確'
+        resp = "學號格式不正確"
 
     return resp
 
@@ -67,9 +69,9 @@ def is_sid(recv):
 @csrf_exempt
 def callback(request):
 
-    if request.method == 'POST':
-        signature = request.META['HTTP_X_LINE_SIGNATURE']
-        body = request.body.decode('utf-8')
+    if request.method == "POST":
+        signature = request.META["HTTP_X_LINE_SIGNATURE"]
+        body = request.body.decode("utf-8")
 
         try:
             events = parser.parse(body, signature)
@@ -80,9 +82,9 @@ def callback(request):
 
         for event in events:
             if isinstance(event, MessageEvent):
-                recv = event.message.text.strip() # 收到的訊息
-                resp = None # 打算回覆的訊息
-                user_id = event.source.user_id # 傳訊息 LINE 帳號的 ID
+                recv = event.message.text.strip()  # 收到的訊息
+                resp = None  # 打算回覆的訊息
+                user_id = event.source.user_id  # 傳訊息 LINE 帳號的 ID
                 # 都是整數就準備來檢查看看是不是學號
                 if recv.isdigit() and is_staff(user_id):
                     # 回傳學號資料
@@ -95,10 +97,7 @@ def callback(request):
                         resp = recv
                 else:
                     resp = recv
-                line_bot_api.reply_message(
-                    event.reply_token,
-                   TextSendMessage(text=resp)
-                )
+                line_bot_api.reply_message(event.reply_token, TextSendMessage(text=resp))
                 profile = line_bot_api.get_profile(user_id)
                 RecvMSG.objects.create(user_id=user_id, display_name=profile.display_name, MSG=recv)
         return HttpResponse()

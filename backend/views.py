@@ -1,26 +1,27 @@
-from django.shortcuts import render, redirect
-from .models import *
-from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
 import xlrd
-from .forms import SheetCheckForm
-from django.core.exceptions import PermissionDenied
-from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
+
 from utils import google_sheet_utils
+
+from .forms import SheetCheckForm
+from .models import *
 
 
 @login_required
 def index(request):
     """首頁，擁有搜尋會員功能"""
-    if 'Q' in request.GET:
-        query = request.GET['Q'].strip()
+    if "Q" in request.GET:
+        query = request.GET["Q"].strip()
         if len(query) == 0:
             return redirect(index)
         search_param = query.split()
         result = Member.objects.query_member(search_param)
-        return render(request, 'index.html', locals())
+        return render(request, "index.html", locals())
     else:
-        return render(request, 'index.html')
+        return render(request, "index.html")
 
 
 @login_required
@@ -31,7 +32,7 @@ def group_list(request):
 
     gp_list = Group.objects.group_list(request.user.id)
 
-    return render(request, 'Group/list.html', locals())
+    return render(request, "Group/list.html", locals())
 
 
 @login_required
@@ -47,7 +48,7 @@ def group_detail(request, uid):
         edit = UserPerms.objects.get(user=request.user.id, gp=uid).edit
         gp = Group.objects.get(id=uid)
         gp_member = GroupMember.objects.filter(GP__id=uid)
-        return render(request, 'Group/detail.html', locals())
+        return render(request, "Group/detail.html", locals())
     else:
         raise PermissionDenied
 
@@ -66,11 +67,11 @@ def group_member_update(request, gp=0, sid=0):
     if UserPerms.objects.filter(user=request.user.id, gp=gp, edit=True):
         if request.method == "GET":
             user = GroupMember.objects.get(GP__id=gp, MEMBER__SID=sid)
-            return render(request, 'Group/edit.html', locals())
+            return render(request, "Group/edit.html", locals())
         else:
-            title = request.POST['title'].strip()
-            email = request.POST['email'].strip()
-            phone = request.POST['phone'].strip()
+            title = request.POST["title"].strip()
+            email = request.POST["email"].strip()
+            phone = request.POST["phone"].strip()
             GroupMember.objects.member_update(sid, gp, title, email, phone)
             return redirect(group_detail, gp)
     else:
@@ -88,14 +89,14 @@ def group_member_list_update(request, gp):
     if not UserPerms.objects.filter(user=request.user.id, gp=gp, edit=True):
         raise PermissionDenied
 
-    if request.method == 'POST':
-        gp_id = request.POST['gp'].strip()
-        add = request.POST['add'].strip().split(',')
-        remove = request.POST['remove'].strip().split(',')
+    if request.method == "POST":
+        gp_id = request.POST["gp"].strip()
+        add = request.POST["add"].strip().split(",")
+        remove = request.POST["remove"].strip().split(",")
         gp = Group.objects.get(id=gp_id)
         GroupMember.objects.member_list_update(gp, add, remove)
         return redirect(group_detail, gp_id)
-    return render(request, 'Group/group_member_list_update.html', locals())
+    return render(request, "Group/group_member_list_update.html", locals())
 
 
 @login_required
@@ -107,19 +108,18 @@ def google_sheet(request, gid=0):
             sheet = GoogleSheet.objects.get(id=gid)
         except ObjectDoesNotExist:
             return HttpResponse("找不到該表單，請聯絡開發人員")
-        table = google_sheet_utils.parse(sheet.URL, sheet.SID, sheet.CNAME,
-                                         sheet.VIP)
+        table = google_sheet_utils.parse(sheet.URL, sheet.SID, sheet.CNAME, sheet.VIP)
         thead = table[0]
         tbody = table[1:]
         amount = len(tbody)
         SID, CNAME, VIP, EMAIL = sheet.SID, sheet.CNAME, sheet.VIP, sheet.EMAIL
-        return render(request, 'GoogleSheet/sheet.html', locals())
+        return render(request, "GoogleSheet/sheet.html", locals())
 
     else:
         gp = UserPerms.objects.filter(user=request.user.id)
         gp_list = [i.gp for i in gp]
         sheet = GoogleSheet.objects.filter(GP__in=gp_list)
-        return render(request, 'GoogleSheet/list.html', locals())
+        return render(request, "GoogleSheet/list.html", locals())
 
 
 @login_required
@@ -127,7 +127,7 @@ def google_sheet_add(request):
     """新增 Google 表單的結果"""
     if request.method == "GET":
         gp = UserPerms.objects.filter(user=request.user.id)
-        return render(request, 'GoogleSheet/add.html', locals())
+        return render(request, "GoogleSheet/add.html", locals())
 
     elif request.method == "POST":
         if google_sheet_utils.add(request):
@@ -142,7 +142,7 @@ def google_sheet_edit(request, uid):
     if request.method == "GET":
         gp = UserPerms.objects.filter(user=request.user.id)
         gs = GoogleSheet.objects.get(id=uid)
-        return render(request, 'GoogleSheet/edit.html', locals())
+        return render(request, "GoogleSheet/edit.html", locals())
 
     elif request.method == "POST":
         if google_sheet_utils.edit(request):
@@ -154,29 +154,29 @@ def google_sheet_edit(request, uid):
 @login_required
 def sheet_check(request):
     """上傳 xls/xlsx，以檢查表單資料是否正確, one of the nav bar item"""
-    if request.method == 'POST':
+    if request.method == "POST":
         form = SheetCheckForm(request.POST, request.FILES)
         if form.is_valid():
             # read the data from form and calculate the value
             position = {
-                'sid_pos': form.cleaned_data['sid'],
-                'is_member__pos': form.cleaned_data['is_member'],
-                'name_pos': form.cleaned_data['name'],
-                'email_pos': form.cleaned_data['email']
+                "sid_pos": form.cleaned_data["sid"],
+                "is_member__pos": form.cleaned_data["is_member"],
+                "name_pos": form.cleaned_data["name"],
+                "email_pos": form.cleaned_data["email"],
             }
-            gid = form.cleaned_data['gid']
+            gid = form.cleaned_data["gid"]
             # read the data in memory directly
-            input_excel = request.FILES['spreadsheet'].read()
+            input_excel = request.FILES["spreadsheet"].read()
             data = xlrd.open_workbook(file_contents=input_excel)
             result = []
             for table in data.sheets():
                 # check the sheet
                 tmp = Member.objects.sheet_check(gid, table, position)
                 result.append(tmp)
-            return render(request, 'xls_check/result.html', locals())
-        return render(request, 'xls_check/upload.html', locals())
+            return render(request, "xls_check/result.html", locals())
+        return render(request, "xls_check/upload.html", locals())
     # GET
     else:
         gp_list = Group.objects.group_list(request.user.id)
         form = SheetCheckForm()
-    return render(request, 'xls_check/upload.html', locals())
+    return render(request, "xls_check/upload.html", locals())

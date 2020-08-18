@@ -6,6 +6,7 @@ def parse(url, SID, CNAME, VIP):
     from selenium import webdriver
     from bs4 import BeautifulSoup
     from selenium.webdriver import FirefoxOptions
+
     opts = FirefoxOptions()
     opts.add_argument("--headless")
     driver = webdriver.Firefox(firefox_options=opts)
@@ -60,8 +61,9 @@ def add(request):
     email = to_none(email)
 
     if title.strip() != "" and url.strip() != "":
-        GoogleSheet.objects.create(TITLE=title, URL=url, GP=gp, SID=sid,
-                                   CNAME=cname, VIP=vip, EMAIL=email)
+        GoogleSheet.objects.create(
+            TITLE=title, URL=url, GP=gp, SID=sid, CNAME=cname, VIP=vip, EMAIL=email
+        )
         return True
     else:
         return False

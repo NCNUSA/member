@@ -1,25 +1,26 @@
 from django.core.management.base import BaseCommand, CommandError
+
 from backend.models import Member
 
 # import file path
 PATH = ""
 # define indicator
-degree = ['學', '碩', '博']
-status = ['1', '2', '3', '4', '5', '6', '7', '8', '畢業', '退學', '休學']
+degree = ["學", "碩", "博"]
+status = ["1", "2", "3", "4", "5", "6", "7", "8", "畢業", "退學", "休學"]
 degree_status = []
 for i in degree:
     for j in status:
-        degree_status.append(i+j)
+        degree_status.append(i + j)
 
 
 class Command(BaseCommand):
-    help = 'import member into database'
+    help = "import member into database"
 
     def add_arguments(self, parser):
-        parser.add_argument('stu_year', nargs='+', type=int)
+        parser.add_argument("stu_year", nargs="+", type=int)
 
     def handle(self, *args, **options):
-        for stu_year in options['stu_year']:
+        for stu_year in options["stu_year"]:
             global PATH
             # open file
             PATH = PATH + str(stu_year)
@@ -33,8 +34,8 @@ class Command(BaseCommand):
                         dep = t[2][:pos]
                         sid = t[0]
                         cname = t[1]
-                        if not Member.objects.filter(SID = sid).exists():
-                            Member.objects.create(SID = sid, CNAME = cname, DEP = dep, GRADE = grade)
+                        if not Member.objects.filter(SID=sid).exists():
+                            Member.objects.create(SID=sid, CNAME=cname, DEP=dep, GRADE=grade)
                     else:
                         continue
-        self.stdout.write(self.style.SUCCESS('done!'))
+        self.stdout.write(self.style.SUCCESS("done!"))

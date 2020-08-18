@@ -5,14 +5,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('line_bot', '0003_recvmsg'),
-    ]
+    dependencies = [("line_bot", "0003_recvmsg")]
 
     operations = [
         migrations.AlterField(
-            model_name='recvmsg',
-            name='user_id',
-            field=models.CharField(max_length=100, verbose_name='LINE User ID'),
-        ),
+            model_name="recvmsg",
+            name="user_id",
+            field=models.CharField(max_length=100, verbose_name="LINE User ID"),
+        )
     ]
