@@ -1,5 +1,6 @@
 from django.db import models
 from .manager import MemberManager
+from .validator import Validator
 
 
 class Member(models.Model):
@@ -19,3 +20,11 @@ class Member(models.Model):
 
     def __str__(self):
         return self.SID + " " + self.CNAME
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super(Member, self).save()
+
+    def clean(self):
+        super().clean()
+        Validator(self).execute()
